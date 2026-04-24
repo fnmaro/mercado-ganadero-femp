@@ -1,13 +1,19 @@
 name: Actualizar Datos Ganaderos FEMP
+
 on:
- workflow_dispatch:
+  workflow_dispatch: # Esto habilita el botón manual
   schedule:
-    - cron: '0 12 * * 1-5'
- jobs:
+    - cron: '0 12 * * 1-5' # Se ejecuta solo de lunes a viernes
+
+permissions:
+  contents: write # IMPORTANTE: Permite que el bot suba los archivos de datos
+
+jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout del código
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,5 +38,5 @@ on:
           git config user.name "FEMP Bot"
           git config user.email "bot@femp.local"
           git add data/
-          git diff --cached --quiet || git commit -m "[AUTO] Datos ganaderos ${{ github.run_id }} - $(date +%Y-%m-%d_%H:%M)"
-          git push
+          # Solo hace commit si hay cambios reales en los precios
+          git diff --cached --quiet || (git commit -m "[AUTO] Actualización precios $(date +%Y-%m-%d)" && git push)
