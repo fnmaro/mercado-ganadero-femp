@@ -1,55 +1,55 @@
 {
   "fecha": "2026-04-24",
-  "hora": "12:23:44",
+  "hora": "15:54:44",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-24T12:23:44.439Z",
+  "_syncTime": "2026-04-24T15:54:44.338Z",
   "_version": "3.0.0-FEMP",
-  "_ultimoDatoReal": "2026-04-24 11:55:19",
+  "_ultimoDatoReal": "2026-04-24 12:23:44",
   "dolar": {
     "oficial": {
-      "compra": 1365,
-      "venta": 1415,
-      "fecha": "2026-04-23T17:00:00.000Z",
+      "compra": 1370,
+      "venta": 1420,
+      "fecha": "2026-04-24T11:23:00.000Z",
       "fuente": "DolarAPI"
     },
     "blue": {
       "compra": 1400,
       "venta": 1420,
-      "fecha": "2026-04-24T12:00:00.000Z",
+      "fecha": "2026-04-24T15:00:00.000Z",
       "fuente": "DolarAPI"
     },
     "mep": {
-      "compra": 1421,
-      "venta": 1429.3,
-      "fecha": "2026-04-24T12:00:00.000Z",
+      "compra": 1432.2,
+      "venta": 1434.8,
+      "fecha": "2026-04-24T15:00:00.000Z",
       "fuente": "DolarAPI"
     },
     "ccl": {
-      "compra": 1475.7,
-      "venta": 1477.7,
-      "fecha": "2026-04-24T12:00:00.000Z",
+      "compra": 1486.1,
+      "venta": 1487.2,
+      "fecha": "2026-04-24T15:00:00.000Z",
       "fuente": "DolarAPI"
     }
   },
   "granos": {
     "maiz": {
-      "precio": 257184,
+      "precio": 253480,
       "unidad": "$/tn",
       "fecha": "2026-04-24",
-      "fuente": "BCR (seed)"
+      "fuente": "BCR Rosario"
     },
     "soja": {
       "precio": 430000,
       "unidad": "$/tn",
       "fecha": "2026-04-24",
-      "fuente": "BCR (seed)"
+      "fuente": "BCR Rosario"
     },
     "trigo": {
-      "precio": 219500,
+      "precio": 264330,
       "unidad": "$/tn",
       "fecha": "2026-04-24",
-      "fuente": "BCR (seed)"
+      "fuente": "BCR Rosario"
     }
   },
   "canuelas": {
@@ -113,7 +113,7 @@
       "max": 7500
     },
     "fecha": "2026-04-24",
-    "fuente": "APEA (seed)"
+    "fuente": "APEA Boletin"
   },
   "rosgan": [
     {
@@ -162,118 +162,88 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com/v1/dolares",
-      "timestamp": "24/4/2026, 12:23:48",
+      "timestamp": "24/4/2026, 03:54:48",
       "estado": "OK",
       "confianza": "ALTA",
-      "hash": "b8dd1c5e952084d3"
+      "hash": "f3eea3be4054c233"
     },
     {
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "24/4/2026, 12:23:48",
-      "estado": "FALLO",
-      "confianza": "BAJA",
-      "hash": "2c03077e8632cc3a"
-    },
-    {
-      "dato": "Granos",
-      "fuente": "BCR/Agrofy",
-      "url": "multiple",
-      "timestamp": "24/4/2026, 12:23:52",
-      "estado": "FALLO",
-      "confianza": "BAJA",
-      "hash": "ba2dc46e10e3548a"
-    },
-    {
-      "dato": "Granos",
-      "fuente": "Cache Fallback",
-      "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 12:23:52",
-      "estado": "CACHE",
-      "confianza": "MEDIA",
-      "hash": "9aac1bd67d95d02b"
+      "timestamp": "24/4/2026, 03:54:57",
+      "estado": "OK",
+      "confianza": "ALTA",
+      "hash": "fe577672cacad3e6"
     },
     {
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "24/4/2026, 12:23:52",
+      "timestamp": "24/4/2026, 03:54:59",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "3502f825a5b976c2"
+      "hash": "32b7504d6b74cb54"
     },
     {
       "dato": "Canuelas",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 12:23:52",
+      "timestamp": "24/4/2026, 03:54:59",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "6c578737b7311112"
+      "hash": "a92b6446e31ee3cc"
     },
     {
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "24/4/2026, 12:23:52",
-      "estado": "FALLO",
-      "confianza": "BAJA",
-      "hash": "1481bc83dc87d6f3"
-    },
-    {
-      "dato": "APEA",
-      "fuente": "Cache Fallback",
-      "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 12:23:52",
-      "estado": "CACHE",
+      "timestamp": "24/4/2026, 03:55:05",
+      "estado": "OK",
       "confianza": "MEDIA",
-      "hash": "61e3ee2b1a52729f"
+      "hash": "0bae643787adfd11"
     },
     {
       "dato": "Rosgan",
       "fuente": "Rosgan/Infocampo",
       "url": "multiple",
-      "timestamp": "24/4/2026, 12:23:57",
+      "timestamp": "24/4/2026, 03:55:13",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "17863d02c14b2da3"
+      "hash": "f8ea77afbb380765"
     },
     {
       "dato": "Rosgan",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 12:23:57",
+      "timestamp": "24/4/2026, 03:55:13",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "5b5d3f825ede0bea"
+      "hash": "0f9fe3c9a3e1f6b9"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Infocampo",
       "url": "https://www.infocampo.com.ar",
-      "timestamp": "24/4/2026, 12:24:01",
+      "timestamp": "24/4/2026, 03:55:18",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "5465b21510eba721"
+      "hash": "78a06451b03e9240"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 12:24:01",
+      "timestamp": "24/4/2026, 03:55:18",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "a25216bc7437a1c7"
+      "hash": "54c2319e8bdc95d2"
     }
   ],
   "_errores": [
-    "BCR: Could not find Chrome (ver. 127.0.6533.88). This can occur if either\n 1. you did not perform an installation before running the script (e.g. `npx puppeteer browsers install chrome`) or\n 2. your cache path is incorrectly configured (which is: /home/runner/work/mercado-ganadero-femp/mercado-ganadero-femp/.cache/puppeteer).\nFor (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.",
-    "Granos: todas las fuentes fallaron",
-    "Canuelas: Could not find Chrome (ver. 127.0.6533.88). This can occur if either\n 1. you did not perform an installation before running the script (e.g. `npx puppeteer browsers install chrome`) or\n 2. your cache path is incorrectly configured (which is: /home/runner/work/mercado-ganadero-femp/mercado-ganadero-femp/.cache/puppeteer).\nFor (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.",
-    "APEA: Could not find Chrome (ver. 127.0.6533.88). This can occur if either\n 1. you did not perform an installation before running the script (e.g. `npx puppeteer browsers install chrome`) or\n 2. your cache path is incorrectly configured (which is: /home/runner/work/mercado-ganadero-femp/mercado-ganadero-femp/.cache/puppeteer).\nFor (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.",
+    "Canuelas: sin datos",
     "Rosgan: todas las fuentes fallaron",
     "Tradicion/Ceres: sin datos"
   ],
-  "_confianza": 17
+  "_confianza": 50
 }

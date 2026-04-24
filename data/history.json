@@ -3,48 +3,48 @@
     "fecha": "2026-04-24",
     "dolar": {
       "oficial": {
-        "compra": 1365,
-        "venta": 1415,
-        "fecha": "2026-04-23T17:00:00.000Z",
+        "compra": 1370,
+        "venta": 1420,
+        "fecha": "2026-04-24T11:23:00.000Z",
         "fuente": "DolarAPI"
       },
       "blue": {
         "compra": 1400,
         "venta": 1420,
-        "fecha": "2026-04-24T12:00:00.000Z",
+        "fecha": "2026-04-24T15:00:00.000Z",
         "fuente": "DolarAPI"
       },
       "mep": {
-        "compra": 1421,
-        "venta": 1429.3,
-        "fecha": "2026-04-24T12:00:00.000Z",
+        "compra": 1432.2,
+        "venta": 1434.8,
+        "fecha": "2026-04-24T15:00:00.000Z",
         "fuente": "DolarAPI"
       },
       "ccl": {
-        "compra": 1475.7,
-        "venta": 1477.7,
-        "fecha": "2026-04-24T12:00:00.000Z",
+        "compra": 1486.1,
+        "venta": 1487.2,
+        "fecha": "2026-04-24T15:00:00.000Z",
         "fuente": "DolarAPI"
       }
     },
     "granos": {
       "maiz": {
-        "precio": 257184,
+        "precio": 253480,
         "unidad": "$/tn",
         "fecha": "2026-04-24",
-        "fuente": "BCR (seed)"
+        "fuente": "BCR Rosario"
       },
       "soja": {
         "precio": 430000,
         "unidad": "$/tn",
         "fecha": "2026-04-24",
-        "fuente": "BCR (seed)"
+        "fuente": "BCR Rosario"
       },
       "trigo": {
-        "precio": 219500,
+        "precio": 264330,
         "unidad": "$/tn",
         "fecha": "2026-04-24",
-        "fuente": "BCR (seed)"
+        "fuente": "BCR Rosario"
       }
     },
     "canuelas": {
