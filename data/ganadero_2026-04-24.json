@@ -1,34 +1,34 @@
 {
   "fecha": "2026-04-24",
-  "hora": "15:54:44",
+  "hora": "19:46:43",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-24T15:54:44.338Z",
+  "_syncTime": "2026-04-24T19:46:43.656Z",
   "_version": "3.0.0-FEMP",
-  "_ultimoDatoReal": "2026-04-24 12:23:44",
+  "_ultimoDatoReal": "2026-04-24 15:54:44",
   "dolar": {
     "oficial": {
       "compra": 1370,
       "venta": 1420,
-      "fecha": "2026-04-24T11:23:00.000Z",
+      "fecha": "2026-04-24T15:05:00.000Z",
       "fuente": "DolarAPI"
     },
     "blue": {
       "compra": 1400,
       "venta": 1420,
-      "fecha": "2026-04-24T15:00:00.000Z",
+      "fecha": "2026-04-24T18:58:00.000Z",
       "fuente": "DolarAPI"
     },
     "mep": {
-      "compra": 1432.2,
-      "venta": 1434.8,
-      "fecha": "2026-04-24T15:00:00.000Z",
+      "compra": 1437.1,
+      "venta": 1439.1,
+      "fecha": "2026-04-24T18:58:00.000Z",
       "fuente": "DolarAPI"
     },
     "ccl": {
-      "compra": 1486.1,
-      "venta": 1487.2,
-      "fecha": "2026-04-24T15:00:00.000Z",
+      "compra": 1492.2,
+      "venta": 1492.8,
+      "fecha": "2026-04-24T18:58:00.000Z",
       "fuente": "DolarAPI"
     }
   },
@@ -162,82 +162,82 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com/v1/dolares",
-      "timestamp": "24/4/2026, 03:54:48",
+      "timestamp": "24/4/2026, 07:46:47",
       "estado": "OK",
       "confianza": "ALTA",
-      "hash": "f3eea3be4054c233"
+      "hash": "181c800a802cfd73"
     },
     {
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "24/4/2026, 03:54:57",
+      "timestamp": "24/4/2026, 07:46:55",
       "estado": "OK",
       "confianza": "ALTA",
-      "hash": "fe577672cacad3e6"
+      "hash": "a967e50872197d29"
     },
     {
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "24/4/2026, 03:54:59",
+      "timestamp": "24/4/2026, 07:46:57",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "32b7504d6b74cb54"
+      "hash": "4c8d4c41d54255d0"
     },
     {
       "dato": "Canuelas",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 03:54:59",
+      "timestamp": "24/4/2026, 07:46:57",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "a92b6446e31ee3cc"
+      "hash": "04519b752c944ede"
     },
     {
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "24/4/2026, 03:55:05",
+      "timestamp": "24/4/2026, 07:46:59",
       "estado": "OK",
       "confianza": "MEDIA",
-      "hash": "0bae643787adfd11"
+      "hash": "34c3b31d7d397982"
     },
     {
       "dato": "Rosgan",
       "fuente": "Rosgan/Infocampo",
       "url": "multiple",
-      "timestamp": "24/4/2026, 03:55:13",
+      "timestamp": "24/4/2026, 07:47:06",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "f8ea77afbb380765"
+      "hash": "6df4a5c9846202c7"
     },
     {
       "dato": "Rosgan",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 03:55:13",
+      "timestamp": "24/4/2026, 07:47:06",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "0f9fe3c9a3e1f6b9"
+      "hash": "afdbee9d6638728b"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Infocampo",
       "url": "https://www.infocampo.com.ar",
-      "timestamp": "24/4/2026, 03:55:18",
+      "timestamp": "24/4/2026, 07:47:11",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "78a06451b03e9240"
+      "hash": "49239e44dc8d9d84"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 03:55:18",
+      "timestamp": "24/4/2026, 07:47:11",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "54c2319e8bdc95d2"
+      "hash": "9e9b1549aa55fc0e"
     }
   ],
   "_errores": [
