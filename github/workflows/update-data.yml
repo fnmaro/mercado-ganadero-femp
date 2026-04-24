@@ -1,0 +1,38 @@
+name: Actualizar Datos Ganaderos FEMP
+
+on:
+  schedule:
+    - cron: '0 12 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias del sistema para Puppeteer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev libnss3 libatk-bridge2.0-0 libgtk-3-0
+
+      - name: Instalar dependencias Node
+        run: npm install
+
+      - name: Ejecutar scraper FEMP
+        run: node scraper.js
+        env:
+          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/.cache/puppeteer
+
+      - name: Commit y push de datos
+        run: |
+          git config user.name "FEMP Bot"
+          git config user.email "bot@femp.local"
+          git add data/
+          git diff --cached --quiet || git commit -m "[AUTO] Datos ganaderos ${{ github.run_id }} - $(date +%Y-%m-%d_%H:%M)"
+          git push
