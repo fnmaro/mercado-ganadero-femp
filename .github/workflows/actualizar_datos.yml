@@ -3,7 +3,7 @@ name: Actualizar Datos Ganaderos FEMP
 on:
   workflow_dispatch: # Esto habilita el botón manual
   schedule:
-    - cron: '0 12 * * 1-5' # Se ejecuta solo de lunes a viernes
+    - cron: '0 12 * * 1-5' # Se ejecuta solo de lunes a viernes a las 12:00 UTC
 
 permissions:
   contents: write # IMPORTANTE: Permite que el bot suba los archivos de datos
@@ -27,6 +27,9 @@ jobs:
 
       - name: Instalar dependencias Node
         run: npm install
+
+      - name: Instalar Navegador para Puppeteer
+        run: npx puppeteer browsers install chrome
 
       - name: Ejecutar scraper FEMP
         run: node scraper.js
