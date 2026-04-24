@@ -11,19 +11,19 @@
       "blue": {
         "compra": 1400,
         "venta": 1420,
-        "fecha": "2026-04-23T21:00:00.000Z",
+        "fecha": "2026-04-24T12:00:00.000Z",
         "fuente": "DolarAPI"
       },
       "mep": {
         "compra": 1421,
         "venta": 1429.3,
-        "fecha": "2026-04-23T21:00:00.000Z",
+        "fecha": "2026-04-24T12:00:00.000Z",
         "fuente": "DolarAPI"
       },
       "ccl": {
         "compra": 1475.7,
         "venta": 1477.7,
-        "fecha": "2026-04-23T21:00:00.000Z",
+        "fecha": "2026-04-24T12:00:00.000Z",
         "fuente": "DolarAPI"
       }
     },

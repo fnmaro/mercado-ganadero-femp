@@ -1,11 +1,11 @@
 {
   "fecha": "2026-04-24",
-  "hora": "11:55:19",
+  "hora": "12:23:44",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-24T11:55:19.073Z",
+  "_syncTime": "2026-04-24T12:23:44.439Z",
   "_version": "3.0.0-FEMP",
-  "_ultimoDatoReal": "2026-04-24 07:51",
+  "_ultimoDatoReal": "2026-04-24 11:55:19",
   "dolar": {
     "oficial": {
       "compra": 1365,
@@ -16,19 +16,19 @@
     "blue": {
       "compra": 1400,
       "venta": 1420,
-      "fecha": "2026-04-23T21:00:00.000Z",
+      "fecha": "2026-04-24T12:00:00.000Z",
       "fuente": "DolarAPI"
     },
     "mep": {
       "compra": 1421,
       "venta": 1429.3,
-      "fecha": "2026-04-23T21:00:00.000Z",
+      "fecha": "2026-04-24T12:00:00.000Z",
       "fuente": "DolarAPI"
     },
     "ccl": {
       "compra": 1475.7,
       "venta": 1477.7,
-      "fecha": "2026-04-23T21:00:00.000Z",
+      "fecha": "2026-04-24T12:00:00.000Z",
       "fuente": "DolarAPI"
     }
   },
@@ -162,109 +162,109 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com/v1/dolares",
-      "timestamp": "24/4/2026, 11:55:23",
+      "timestamp": "24/4/2026, 12:23:48",
       "estado": "OK",
       "confianza": "ALTA",
-      "hash": "6ea91cc628955a73"
+      "hash": "b8dd1c5e952084d3"
     },
     {
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "24/4/2026, 11:55:23",
+      "timestamp": "24/4/2026, 12:23:48",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "07ac5fcf80865a5e"
+      "hash": "2c03077e8632cc3a"
     },
     {
       "dato": "Granos",
       "fuente": "BCR/Agrofy",
       "url": "multiple",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "7ad622ded3c6db14"
+      "hash": "ba2dc46e10e3548a"
     },
     {
       "dato": "Granos",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "98d156b3ffad49cc"
+      "hash": "9aac1bd67d95d02b"
     },
     {
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "5e6a031b3471154d"
+      "hash": "3502f825a5b976c2"
     },
     {
       "dato": "Canuelas",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "891dfe942499dde2"
+      "hash": "6c578737b7311112"
     },
     {
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "abcf9fe0c8e41e8c"
+      "hash": "1481bc83dc87d6f3"
     },
     {
       "dato": "APEA",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 11:55:27",
+      "timestamp": "24/4/2026, 12:23:52",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "04c00633ba33d8ae"
+      "hash": "61e3ee2b1a52729f"
     },
     {
       "dato": "Rosgan",
       "fuente": "Rosgan/Infocampo",
       "url": "multiple",
-      "timestamp": "24/4/2026, 11:55:32",
+      "timestamp": "24/4/2026, 12:23:57",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "524077fae7a292c4"
+      "hash": "17863d02c14b2da3"
     },
     {
       "dato": "Rosgan",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 11:55:32",
+      "timestamp": "24/4/2026, 12:23:57",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "9167336a433867e1"
+      "hash": "5b5d3f825ede0bea"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Infocampo",
       "url": "https://www.infocampo.com.ar",
-      "timestamp": "24/4/2026, 11:55:38",
+      "timestamp": "24/4/2026, 12:24:01",
       "estado": "FALLO",
       "confianza": "BAJA",
-      "hash": "03b5f6e292189d8d"
+      "hash": "5465b21510eba721"
     },
     {
       "dato": "Tradicion/Ceres",
       "fuente": "Cache Fallback",
       "url": "./data/latest.json",
-      "timestamp": "24/4/2026, 11:55:38",
+      "timestamp": "24/4/2026, 12:24:01",
       "estado": "CACHE",
       "confianza": "MEDIA",
-      "hash": "8ea5f42b2ceb1884"
+      "hash": "a25216bc7437a1c7"
     }
   ],
   "_errores": [
