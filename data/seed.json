@@ -1,0 +1,176 @@
+{
+  "fecha": "2026-04-24",
+  "hora": "07:51",
+  "diaMercado": true,
+  "_modo": "SEED",
+  "_syncTime": "2026-04-24T07:51:00.000Z",
+  "_version": "3.0.0-FEMP",
+  "_confianza": 0,
+  "_nota": "Datos iniciales de semilla. Ejecutar scraper para obtener datos en tiempo real.",
+  "_ultimoDatoReal": null,
+  "dolar": {
+    "oficial": {
+      "compra": 1360,
+      "venta": 1400,
+      "fecha": "2026-04-24",
+      "fuente": "DolarAPI (seed)"
+    },
+    "blue": {
+      "compra": 1390,
+      "venta": 1410,
+      "fecha": "2026-04-24",
+      "fuente": "DolarAPI (seed)"
+    },
+    "mep": {
+      "compra": 1399,
+      "venta": 1419,
+      "fecha": "2026-04-24",
+      "fuente": "DolarAPI (seed)"
+    },
+    "ccl": {
+      "compra": 1405,
+      "venta": 1425,
+      "fecha": "2026-04-24",
+      "fuente": "DolarAPI (seed)"
+    }
+  },
+  "granos": {
+    "maiz": {
+      "precio": 257184,
+      "unidad": "$/tn",
+      "fecha": "2026-04-24",
+      "fuente": "BCR (seed)"
+    },
+    "soja": {
+      "precio": 430000,
+      "unidad": "$/tn",
+      "fecha": "2026-04-24",
+      "fuente": "BCR (seed)"
+    },
+    "trigo": {
+      "precio": 219500,
+      "unidad": "$/tn",
+      "fecha": "2026-04-24",
+      "fuente": "BCR (seed)"
+    }
+  },
+  "canuelas": {
+    "fecha": "2026-04-24",
+    "entrada": 8442,
+    "vacaGorda": {
+      "precio": 3197,
+      "unidad": "$/kg",
+      "categoria": "Buenas",
+      "fecha": "2026-04-24",
+      "fuente": "Canuelas (seed)"
+    },
+    "novilloGordo": {
+      "precio": 4419,
+      "unidad": "$/kg",
+      "categoria": "Promedio General",
+      "fecha": "2026-04-24",
+      "fuente": "Canuelas (seed)"
+    },
+    "novillo431": {
+      "precio": 4531,
+      "unidad": "$/kg",
+      "categoria": "Mest.EyB 431/460",
+      "fecha": "2026-04-24",
+      "fuente": "Canuelas (seed)"
+    },
+    "vaquillona270": {
+      "precio": 4921,
+      "unidad": "$/kg",
+      "categoria": "EyB 270/390",
+      "fecha": "2026-04-24",
+      "fuente": "Canuelas (seed)"
+    },
+    "novillito300": {
+      "precio": 4954,
+      "unidad": "$/kg",
+      "categoria": "EyB 300/390",
+      "fecha": "2026-04-24",
+      "fuente": "Canuelas (seed)"
+    }
+  },
+  "rosgan": [
+    {
+      "remate": "Rosgan Central",
+      "fecha": "2026-04-24",
+      "hora": "11:00",
+      "consignataria": "Rosgan Central",
+      "lugar": "Rafaela, SF",
+      "terno": 6450,
+      "novillito": 5600,
+      "vaquillona160": 6200,
+      "vaquillona200": 5900,
+      "vacaGorda": 3300,
+      "novilloGordo": 4600,
+      "fuente": "Rosgan (seed)"
+    }
+  ],
+  "tradicion": {
+    "fecha": "2026-04-24",
+    "hora": "10:00",
+    "lugar": "Ceres, Santa Fe",
+    "ternero": 6200,
+    "novillito": 5500,
+    "vaquillona160": 5950,
+    "vaquillona200": 5700,
+    "vacaGorda": 3150,
+    "novilloGordo": 4450,
+    "promMesAnterior": 4380,
+    "fuente": "Tradicion (seed)"
+  },
+  "ceres": {
+    "fecha": "2026-04-24",
+    "hora": "13:00",
+    "lugar": "Predio Ferial Ceres",
+    "ternero": 6373,
+    "novillito": 5380,
+    "vaquillona160": 6100,
+    "vaquillona200": 5800,
+    "vacaGorda": 3200,
+    "novilloGordo": 4500,
+    "promMesAnterior": 4350,
+    "fuente": "Ceres (seed)"
+  },
+  "apea": {
+    "ocupacion": 70,
+    "reposicion": 1.3,
+    "variacion": 4,
+    "hilton": 24000,
+    "novMestizo": {
+      "min": 7900,
+      "max": 8200
+    },
+    "vacaCorte": {
+      "min": 7500,
+      "max": 7800
+    },
+    "novCruza": {
+      "min": 8000,
+      "max": 8300
+    },
+    "vacaManuf": {
+      "min": 7200,
+      "max": 7500
+    },
+    "fecha": "2026-04-24",
+    "fuente": "APEA (seed)"
+  },
+  "_lineage": [
+    {
+      "dato": "Sistema",
+      "fuente": "Seed Data",
+      "url": "hardcoded",
+      "timestamp": "2026-04-24 07:51",
+      "estado": "SEED",
+      "confianza": "BAJA",
+      "hash": "seed000000000000"
+    }
+  ],
+  "_errores": [
+    "Modo SEED: ejecutar scraper para datos en tiempo real"
+  ]
+}
