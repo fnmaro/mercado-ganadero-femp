@@ -1,12 +1,12 @@
 name: Actualizar Datos Ganaderos FEMP
 
 on:
-  workflow_dispatch: # Esto habilita el botón manual
+  workflow_dispatch:
   schedule:
-    - cron: '0 12 * * 1-5' # Se ejecuta solo de lunes a viernes a las 12:00 UTC
+    - cron: '0 12 * * 1-5'
 
 permissions:
-  contents: write # IMPORTANTE: Permite que el bot suba los archivos de datos
+  contents: write
 
 jobs:
   update:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar dependencias del sistema para Puppeteer
+      - name: Instalar dependencias del sistema
         run: |
           sudo apt-get update
           sudo apt-get install -y libgbm-dev libnss3 libatk-bridge2.0-0 libgtk-3-0
@@ -28,8 +28,10 @@ jobs:
       - name: Instalar dependencias Node
         run: npm install
 
-      - name: Instalar Navegador para Puppeteer
+      - name: Instalar Navegador
         run: npx puppeteer browsers install chrome
+        env:
+          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/.cache/puppeteer
 
       - name: Ejecutar scraper FEMP
         run: node scraper.js
@@ -41,5 +43,10 @@ jobs:
           git config user.name "FEMP Bot"
           git config user.email "bot@femp.local"
           git add data/
-          # Solo hace commit si hay cambios reales en los precios
-          git diff --cached --quiet || (git commit -m "[AUTO] Actualización precios $(date +%Y-%m-%d)" && git push)
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "[AUTO] Actualizacion de precios $(date +%Y-%m-%d)"
+            git push
+          else
+            echo "No hay cambios para subir"
+          fi
+          echo done
