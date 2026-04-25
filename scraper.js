@@ -1,5 +1,7 @@
 const fs = require('fs');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 
 const DATA_DIR = './data';
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -162,7 +164,7 @@ async function fetchGranosAgrofy() {
   const html = res.html.toLowerCase();
   const result = {};
   const extract = (keyword) => {
-    const regex = new RegExp(`${keyword}[\s\S]{0,200}?(\d{1,3}(?:[.,]\d{3})*(?:,\d+)?)`, 'i');
+    const regex = new RegExp(`${keyword}[\\s\\S]{0,200}?(\\d{1,3}(?:[.,]\\d{3})*(?:,\\d+)?)`, 'i');
     const m = html.match(regex);
     if (m) {
       const val = parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
@@ -204,7 +206,7 @@ async function fetchCanuelas() {
     () => {
       const result = { fecha: new Date().toISOString().split('T')[0], entrada: 0 };
       const text = document.body.innerText;
-      const mEntrada = text.match(/entrada[s]?[\s\w]*?(\d[\d.,]*)/i);
+      const mEntrada = text.match(/entrada[s]?[\\s\\w]*?(\\d[\\d.,]*)/i);
       if (mEntrada) result.entrada = parseInt(mEntrada[1].replace(/[^0-9]/g, ''));
       document.querySelectorAll('table tr').forEach(row => {
         const cells = row.querySelectorAll('td');
