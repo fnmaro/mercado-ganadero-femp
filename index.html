@@ -725,7 +725,6 @@
             history: []
         },
 
-        // --- FUNCIONES DE BLINDAJE FEMP (NUEVAS) ---
         safeMoney(val, fallback = 'N/D') {
             if (val === null || val === undefined || isNaN(val)) return fallback;
             return Number(val).toLocaleString('es-AR');
@@ -924,7 +923,7 @@
         },
 
         renderCanuelas(d) {
-            const c = d.canuelas || {}; // Blindaje: Si no hay Canuelas, usar objeto vacio para limpiar esqueletos
+            const c = d.canuelas || {}; 
             const setVal = (id, val, semId, conf) => {
                 const el = document.getElementById(id);
                 const sem = document.getElementById(semId);
@@ -966,7 +965,7 @@
         },
 
         renderTradicion(d) {
-            const t = d.tradicion || {}; // Blindaje
+            const t = d.tradicion || {}; 
             const setVal = (id, val, semId) => {
                 const el = document.getElementById(id);
                 const sem = document.getElementById(semId);
@@ -985,7 +984,7 @@
         },
 
         renderCeres(d) {
-            const c = d.ceres || {}; // Blindaje
+            const c = d.ceres || {}; 
             const setVal = (id, val, semId) => {
                 const el = document.getElementById(id);
                 const sem = document.getElementById(semId);
@@ -1004,7 +1003,7 @@
         },
 
         renderAPEA(d) {
-            const a = d.apea || {}; // Blindaje
+            const a = d.apea || {}; 
             document.getElementById('apea-ocupacion').textContent = a.ocupacion ? a.ocupacion + '%' : '--%';
             document.getElementById('apea-reposicion').textContent = a.reposicion ? Number(a.reposicion).toFixed(2) : '--';
             document.getElementById('apea-var').textContent = a.variacion ? ((a.variacion > 0 ? '+' : '') + a.variacion + '%') : '--%';
@@ -1034,7 +1033,10 @@
 
             r.maizTernero = this.safeNum((ternero / maizKg).toFixed(1));
             r.maizNovillo = this.safeNum((novillo / maizKg).toFixed(1));
-            r.terneroNovillo = this.safeNum((novillo / ternero).toFixed(2));
+            
+            // FEMP FIX: Relacion inversa (Kg de gordo necesarios para comprar 1 Kg de invernada)
+            r.terneroNovillo = this.safeNum((ternero / novillo).toFixed(2));
+            
             r.sojaTernero = this.safeNum((ternero / sojaKg).toFixed(1));
             r.sojaNovillo = this.safeNum((novillo / sojaKg).toFixed(1));
             r.vacaNovillo = this.safeNum((novillo / vaca).toFixed(2));
@@ -1207,7 +1209,6 @@
             const d = this.state.datos;
             const rel = this.calcularRelaciones(d);
             
-            // Safe parsing for chart
             const chartData = [
                 rel.maizTernero === '--' ? 0 : parseFloat(rel.maizTernero), 
                 rel.maizNovillo === '--' ? 0 : parseFloat(rel.maizNovillo), 
