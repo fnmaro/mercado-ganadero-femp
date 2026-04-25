@@ -55,5 +55,62 @@
     "apea": {
       "hilton": 24000
     }
+  },
+  {
+    "fecha": "2026-04-25",
+    "dolar": {
+      "oficial": {
+        "compra": 1370,
+        "venta": 1420,
+        "fecha": "2026-04-24T17:00:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "blue": {
+        "compra": 1400,
+        "venta": 1420,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "mep": {
+        "compra": 1437,
+        "venta": 1441.4,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "ccl": {
+        "compra": 1494.6,
+        "venta": 1495.8,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      }
+    },
+    "granos": {
+      "maiz": {
+        "precio": 253480,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      },
+      "soja": {
+        "precio": 430000,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      },
+      "trigo": {
+        "precio": 264330,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      }
+    },
+    "canuelas": {
+      "vacaGorda": 3197,
+      "novilloGordo": 4419,
+      "vaquillona270": 4921
+    },
+    "apea": {
+      "hilton": 24000
+    }
   }
 ]
