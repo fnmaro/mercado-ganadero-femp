@@ -1,9 +1,9 @@
 {
   "fecha": "2026-04-25",
-  "hora": "22:29:18",
+  "hora": "22:42:15",
   "diaMercado": false,
   "_modo": "CACHE",
-  "_syncTime": "2026-04-25T22:29:18.777Z",
+  "_syncTime": "2026-04-25T22:42:15.436Z",
   "_version": "3.0.0-FEMP",
   "_ultimoDatoReal": "2026-04-24 23:25:57",
   "dolar": {
@@ -157,18 +157,8 @@
     "promMesAnterior": 4350,
     "fuente": "Ceres (seed)"
   },
-  "_lineage": [
-    {
-      "dato": "Sistema",
-      "fuente": "Cache Local",
-      "url": "./data/latest.json",
-      "timestamp": "25/4/2026, 10:29:22",
-      "estado": "CACHE",
-      "confianza": "ALTA",
-      "hash": "0d76e2cd64829124"
-    }
-  ],
+  "_lineage": [],
   "_errores": [],
   "_confianza": 0,
-  "_nota": "Mercado cerrado. Mostrando datos del ultimo dia habil: 2026-04-24"
+  "_nota": "Mercado cerrado. Datos de: 2026-04-25"
 }
