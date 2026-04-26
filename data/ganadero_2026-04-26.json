@@ -1,9 +1,9 @@
 {
   "fecha": "2026-04-26",
-  "hora": "23:15:31",
+  "hora": "23:23",
   "diaMercado": false,
   "_modo": "CACHE",
-  "_syncTime": "2026-04-26T23:15:31.903Z",
+  "_syncTime": "2026-04-26T23:23:09.916Z",
   "_version": "3.0.0-FEMP",
   "_ultimoDatoReal": "2026-04-24 23:25:57",
   "dolar": {
@@ -161,7 +161,7 @@
   "_lineage": [],
   "_errores": [],
   "_confianza": 0,
-  "_nota": "Mercado cerrado. Datos de: 2026-04-26",
+  "_nota": "Mercado cerrado. Reteniendo datos de última sesión hábil.",
   "ganaderoIndex": 100,
   "senalMercado": {
     "sma7": 100,
