@@ -11,7 +11,7 @@ const time = new Date().toLocaleTimeString('es-AR', { hour12: false }).substring
 const nowISO = new Date().toISOString();
 
 const CONFIG = {
-  version: '4.3.0-FEMP-SmartCache',
+  version: '4.3.1-FEMP-AntiNaN',
   maxRetries: 3,
   timeout: 25000,
   historyMaxDays: 90,
@@ -42,7 +42,7 @@ async function sendTelegramAlert() {
   if (STATE.alertasCriticas.length === 0) return;
   const token = process.env.TELEGRAM_TOKEN; const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return;
-  const mensaje = `🚨 *FEMP V4.3 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
+  const mensaje = `🚨 *FEMP V4.3.1 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
   try { await fetch(`https://api.telegram.org/bot${token}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: mensaje, parse_mode: 'Markdown' }) }); } catch (e) { console.error('Telegram Error:', e); }
 }
 
@@ -211,13 +211,22 @@ async function main() {
   history.forEach(h => { if (h.fecha >= mondayDate && h.fecha !== today && h.canuelas?.entrada) entradaSemanal += h.canuelas.entrada; });
   if (datos.canuelas) datos.canuelas.entradaSemanal = entradaSemanal;
 
-  // GANADERO INDEX & SEÑALES
-  const pConsumo = (datos.canuelas?.novilloGordo?.precio || datos.canuelas?.novilloGordo) || 4419;
-  const pInvernada = (datos.ceres?.ternero?.precio || datos.ceres?.ternero) || 6373;
-  const pExportacion = (datos.apea?.novMestizo?.precio || datos.apea?.novMestizo) || 8200;
+  // FUNCION DE EXTRACCION SEGURA ANTI-NaN PARA EL INDEX
+  const safeNum = (val, fallback) => {
+    const n = parseFloat(typeof val === 'object' ? (val?.precio || val?.venta) : val);
+    return (isNaN(n) || n <= 0) ? fallback : n;
+  };
+
+  // GANADERO INDEX & SEÑALES PROTEGIDAS
+  const pConsumo = safeNum(datos.canuelas?.novilloGordo, 4419);
+  const pInvernada = safeNum(datos.ceres?.ternero || datos.tradicion?.ternero, 6373);
+  const pExportacion = safeNum(datos.apea?.novMestizo, 8200);
   datos.ganaderoIndex = parseFloat((((pConsumo / 4419) * 100 * 0.50) + ((pInvernada / 6373) * 100 * 0.30) + ((pExportacion / 8200) * 100 * 0.20)).toFixed(2));
 
-  const indices = history.map(h => h.ganaderoIndex).filter(v => v !== undefined); indices.push(datos.ganaderoIndex);
+  // Limpieza de NaN en historial para las Medias Móviles
+  const indices = history.map(h => h.ganaderoIndex).filter(v => v !== undefined && v !== null && !isNaN(v)); 
+  indices.push(datos.ganaderoIndex);
+  
   const sma7 = indices.slice(-7).reduce((a,b)=>a+b,0) / Math.min(7, indices.length) || datos.ganaderoIndex;
   const sma15 = indices.slice(-15).reduce((a,b)=>a+b,0) / Math.min(15, indices.length) || datos.ganaderoIndex;
   let senal = 'MANTENER'; if (sma7 > sma15 * 1.01) senal = 'COMPRA'; else if (sma7 < sma15 * 0.99) senal = 'VENTA';
@@ -230,7 +239,6 @@ async function main() {
   await sendTelegramAlert();
 
   history = history.filter(h => h.fecha !== today);
-  // AHORA GUARDAMOS TODO EL OBJETO CANUELAS PARA QUE EL FIN DE SEMANA NO PIERDA PRECIOS
   history.push({ fecha: today, dolar: datos.dolar, granos: datos.granos, canuelas: datos.canuelas, apea: datos.apea, tradicion: datos.tradicion, ceres: datos.ceres, ganaderoIndex: datos.ganaderoIndex, senal: senal });
   if (history.length > CONFIG.historyMaxDays) history = history.slice(-CONFIG.historyMaxDays);
   fs.writeFileSync(CONFIG.historyFile, JSON.stringify(history, null, 2));
