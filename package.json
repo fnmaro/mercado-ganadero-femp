@@ -1,7 +1,7 @@
 {
   "name": "mercado-ganadero-femp",
-  "version": "3.0.0",
-  "description": "Dashboard ganadero FEMP - 100% automatico con scraping real",
+  "version": "4.1.0",
+  "description": "Dashboard ganadero FEMP - 100% automatico",
   "main": "scraper.js",
   "scripts": {
     "scrape": "node scraper.js",
