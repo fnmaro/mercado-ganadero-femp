@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.2</title>
+    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.3</title>
     <style>
         :root { --bg: #0f0f1a; --bg-card: rgba(20,20,40,0.85); --border: rgba(255,255,255,0.08); --text: #e0e0e0; --text-dim: #888; --gold: #ffd700; --green: #00ff88; --red: #ff4757; --yellow: #ffd700; --blue: #74b9ff; --purple: #a29bfe; --font: 'Segoe UI', system-ui, sans-serif; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,7 +14,9 @@
         .header .datetime { font-size: 1em; margin-top: 10px; color: var(--green); font-weight: 600; }
         .femp-panel { background: linear-gradient(90deg, rgba(233,69,96,0.15), rgba(15,52,96,0.15)); border: 1px solid var(--border); border-left: 4px solid var(--gold); padding: 12px 20px; margin: 15px auto; max-width: 1400px; border-radius: 0 10px 10px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 0.85em; }
         .femp-item { display: flex; align-items: center; gap: 8px; } .femp-item .label { color: var(--text-dim); } .femp-item .value { font-weight: 700; }
-        .badge { padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 700; } .badge-auto { background: rgba(0,255,136,0.2); color: var(--green); border: 1px solid var(--green); } .badge-cache { background: rgba(255,215,0,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; } 
+        .badge-auto { background: rgba(0,255,136,0.2); color: var(--green); border: 1px solid var(--green); } 
+        .badge-cache { background: rgba(255,215,0,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
         .sem { display: inline-block; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 6px currentColor; } .sem-g { background: var(--green); color: var(--green); } .sem-y { background: var(--yellow); color: var(--yellow); }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 40px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
@@ -32,7 +34,7 @@
 <body>
     <div class="header">
         <h1>🐄 Mercado Ganadero en Tiempo Real</h1>
-        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.2</div>
+        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.3</div>
         <div class="datetime" id="dt">Inicializando motor...</div>
     </div>
     
@@ -94,15 +96,17 @@
                 <div class="data-row"><div class="data-col"><span class="label">Dólar MEP</span><span class="meta" id="m-mac-mep">--</span></div><span class="value v-gold" id="mac-mep">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Maíz (Rosario)</span><span class="meta" id="m-mac-maiz">--</span></div><span class="value v-green" id="mac-maiz">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Soja (Rosario)</span><span class="meta" id="m-mac-soja">--</span></div><span class="value v-green" id="mac-soja">$--</span></div>
-                <div class="data-row"><div class="data-col"><span class="label">Brecha Cambiaria</span><span class="meta" id="m-mac-brecha">Cálculo de sistema</span></div><span class="value" id="mac-brecha">--%</span></div>
             </div>
 
-            <div class="block">
-                <div class="block-header"><h2>⚖️ RELACIONES CLAVE</h2></div>
-                <div class="data-row"><div class="data-col"><span class="label">Relación Maíz-Ternero</span><span class="meta">Cálculo en base a cotizaciones</span></div><span class="value" id="rel-mt">--</span></div>
-                <div class="data-row"><div class="data-col"><span class="label">Relación Maíz-Nov. Gordo</span><span class="meta">Cálculo en base a cotizaciones</span></div><span class="value" id="rel-mn">--</span></div>
-                <div class="data-row"><div class="data-col"><span class="label">Índice Reposición (Ter/Nov)</span><span class="meta">Cálculo en base a cotizaciones</span></div><span class="value v-gold" id="rel-tn">--</span></div>
-                <div class="data-row"><div class="data-col"><span class="label">Paridad (USD Blue/Ternero)</span><span class="meta">Cálculo en base a cotizaciones</span></div><span class="value" id="rel-usd">u$s --</span></div>
+            <div class="block full-width" style="border-top: 3px solid var(--gold);">
+                <div class="block-header"><h2>⚖️ RELACIONES CLAVE E INDICADORES (SEMÁFOROS)</h2></div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                    <div class="data-row"><div class="data-col"><span class="label">Índice Reposición (Ter/Nov)</span><span class="meta">🟢 Favorable (<1.15) | 🔴 Retención (>1.30)</span></div><div id="rel-tn">--</div></div>
+                    <div class="data-row"><div class="data-col"><span class="label">Relación Maíz-Ternero</span><span class="meta">🟢 Favorable (<20) | 🔴 Caro (>25)</span></div><div id="rel-mt">--</div></div>
+                    <div class="data-row"><div class="data-col"><span class="label">Relación Maíz-Nov. Gordo</span><span class="meta">🟢 Favorable (<15) | 🔴 Caro (>20)</span></div><div id="rel-mn">--</div></div>
+                    <div class="data-row"><div class="data-col"><span class="label">Brecha Cambiaria (Blue/Oficial)</span><span class="meta">🟢 Estable (<20%) | 🔴 Alerta (>40%)</span></div><div id="mac-brecha">--</div></div>
+                    <div class="data-row"><div class="data-col"><span class="label">Paridad (USD Blue/Ternero)</span><span class="meta">Costo real de reposición en divisa</span></div><span class="value v-blue" id="rel-usd">u$s --</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -112,19 +116,34 @@
         config: { url: './data/latest.json' },
         fmt(v) { return (v !== undefined && v !== null && !isNaN(v)) ? Number(v).toLocaleString('es-AR') : '--'; },
         
+        // MOTOR DE SEMÁFOROS
+        getSemaphore(val, thresholds, isPercentage = false) {
+            if(isNaN(val)) return '--';
+            const vStr = isPercentage ? `${val}%` : val;
+            if (val <= thresholds.green) return `<span class="badge" style="background:rgba(0,255,136,0.15);color:var(--green);border:1px solid var(--green)">🟢 ${vStr} Favorable</span>`;
+            if (val <= thresholds.yellow) return `<span class="badge" style="background:rgba(255,215,0,0.15);color:var(--yellow);border:1px solid var(--yellow)">🟡 ${vStr} Normal</span>`;
+            return `<span class="badge" style="background:rgba(255,71,87,0.15);color:var(--red);border:1px solid var(--red)">🔴 ${vStr} Alerta</span>`;
+        },
+
+        // INYECCIÓN BLINDADA (Retrocompatible con Caché Viejo)
         setVal(vId, mId, obj, prefix = '$', suffix = '') {
-            if (!obj || obj.precio === undefined && obj.venta === undefined) {
-                document.getElementById(vId).textContent = '--';
-                if(mId) document.getElementById(mId).textContent = 'Sin datos';
-                return;
-            }
-            const val = obj.precio || obj.venta;
+            if (!obj) { document.getElementById(vId).textContent = '--'; if(mId) document.getElementById(mId).textContent = 'Sin datos'; return; }
+            
+            // Detección de caché viejo (solo número) vs nuevo (objeto granular)
+            const isOldCache = typeof obj === 'number';
+            const val = isOldCache ? obj : (obj.precio || obj.venta);
+            
             document.getElementById(vId).textContent = `${prefix}${this.fmt(val)}${suffix}`;
+            
             if(mId) {
-                const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
-                const h = obj.hora || '--';
-                const l = obj.lugar || '--';
-                document.getElementById(mId).textContent = `${l} | ${f} ${h}`;
+                if (isOldCache) {
+                    document.getElementById(mId).textContent = 'Caché histórico heredado';
+                } else {
+                    const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
+                    const h = obj.hora || '--';
+                    const l = obj.lugar || '--';
+                    document.getElementById(mId).textContent = `${l} | ${f} ${h}`;
+                }
             }
         },
 
@@ -162,7 +181,7 @@
                 else { sEl.style.background = 'rgba(255,215,0,0.2)'; sEl.style.color = 'var(--yellow)'; sEl.style.border = '1px solid var(--yellow)'; }
             }
 
-            // Entradas Cañuelas (evadiendo NaN)
+            // Entradas Cañuelas
             const entHoy = d.canuelas?.entrada || 0;
             const entSem = d.canuelas?.entradaSemanal || 0;
             document.getElementById('mag-hoy').textContent = this.fmt(entHoy);
@@ -171,36 +190,43 @@
             const ch = d.canuelas?.hora || '--';
             document.getElementById('m-mag-entrada').textContent = `Mercado de Cañuelas | ${cf} ${ch}`;
 
-            // Precios Cañuelas
+            // Precios
             this.setVal('mag-nov', 'm-mag-nov', d.canuelas?.novilloGordo);
             this.setVal('mag-n431', 'm-mag-n431', d.canuelas?.novillo431);
             this.setVal('mag-nt300', 'm-mag-nt300', d.canuelas?.novillito300);
             this.setVal('mag-vaq', 'm-mag-vaq', d.canuelas?.vaquillona270);
             this.setVal('mag-vaca', 'm-mag-vaca', d.canuelas?.vacaGorda);
 
-            // Invernada/Expo
             this.setVal('inv-ter', 'm-inv-ter', d.ceres?.ternero || d.tradicion?.ternero);
             this.setVal('inv-nov', 'm-inv-nov', d.ceres?.novillito || d.tradicion?.novillito);
             this.setVal('exp-hil', 'm-exp-hil', d.apea?.hilton, 'u$s ', '/tn');
             this.setVal('exp-nov', 'm-exp-nov', d.apea?.novMestizo);
 
-            // Macro
             this.setVal('mac-dof', 'm-mac-dof', d.dolar?.oficial);
             this.setVal('mac-dbl', 'm-mac-dbl', d.dolar?.blue);
             this.setVal('mac-mep', 'm-mac-mep', d.dolar?.mep);
             this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
             this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
 
-            const dof = d.dolar?.oficial?.venta || 1400; const dbl = d.dolar?.blue?.venta || 1410;
-            document.getElementById('mac-brecha').textContent = (((dbl - dof) / dof) * 100).toFixed(1) + '%';
+            // CÁLCULOS MACRO Y SEMÁFOROS
+            const ext = (obj) => typeof obj === 'number' ? obj : (obj?.precio || obj?.venta || 0);
+            
+            const ter = ext(d.ceres?.ternero) || ext(d.tradicion?.ternero) || 6373;
+            const novG = ext(d.canuelas?.novilloGordo) || 4419;
+            const mK = (ext(d.granos?.maiz) || 257184) / 1000;
+            const dof = ext(d.dolar?.oficial) || 1400;
+            const dbl = ext(d.dolar?.blue) || 1410;
 
-            // Relaciones Matemáticas
-            const ter = (d.ceres?.ternero?.precio || d.tradicion?.ternero?.precio || 6373);
-            const novG = (d.canuelas?.novilloGordo?.precio || 4419);
-            const mK = (d.granos?.maiz?.precio || 257184) / 1000;
-            document.getElementById('rel-mt').textContent = (ter / mK).toFixed(1);
-            document.getElementById('rel-mn').textContent = (novG / mK).toFixed(1);
-            document.getElementById('rel-tn').textContent = (ter / novG).toFixed(2);
+            const valRep = parseFloat((ter / novG).toFixed(2));
+            const valMt = parseFloat((ter / mK).toFixed(1));
+            const valMn = parseFloat((novG / mK).toFixed(1));
+            const valBrecha = parseFloat((((dbl - dof) / dof) * 100).toFixed(1));
+
+            // Renderizado de Semáforos
+            document.getElementById('rel-tn').innerHTML = this.getSemaphore(valRep, { green: 1.15, yellow: 1.30 });
+            document.getElementById('rel-mt').innerHTML = this.getSemaphore(valMt, { green: 20, yellow: 25 });
+            document.getElementById('rel-mn').innerHTML = this.getSemaphore(valMn, { green: 15, yellow: 20 });
+            document.getElementById('mac-brecha').innerHTML = this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true);
             document.getElementById('rel-usd').textContent = 'u$s ' + (ter / dbl).toFixed(2);
         }
     };
