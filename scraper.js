@@ -7,11 +7,11 @@ const DATA_DIR = './data';
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const today = new Date().toISOString().split('T')[0];
-const time = new Date().toLocaleTimeString('es-AR', { hour12: false });
+const time = new Date().toLocaleTimeString('es-AR', { hour12: false }).substring(0,5); // HH:MM
 const nowISO = new Date().toISOString();
 
 const CONFIG = {
-  version: '4.1.0-FEMP-MAG',
+  version: '4.2.0-FEMP-Granular',
   maxRetries: 3,
   timeout: 25000,
   historyMaxDays: 90,
@@ -38,7 +38,7 @@ function validarInvariante(valor, tipo, fuente, descripcion) {
   const limites = INVARIANTES[tipo];
   if (v < limites.min || v > limites.max) {
     const msg = `VIOLACIÓN DE INVARIANTE: ${descripcion} en ${fuente} reporta $${v}. Bloqueado.`;
-    err(msg); STATE.alertasCriticas.push(msg); return null;
+    console.error(msg); STATE.alertasCriticas.push(msg); return null;
   }
   return v;
 }
@@ -47,15 +47,14 @@ async function sendTelegramAlert() {
   if (STATE.alertasCriticas.length === 0) return;
   const token = process.env.TELEGRAM_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) { log('Telegram no configurado. Alertas no enviadas.'); return; }
-  const mensaje = `🚨 *FEMP V4.1 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
+  if (!token || !chatId) return;
+  const mensaje = `🚨 *FEMP V4.2 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
   try {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, text: mensaje, parse_mode: 'Markdown' })
     });
-    log('Alerta enviada por Telegram.');
-  } catch (e) { log('Error enviando Telegram: ' + e.message); }
+  } catch (e) { console.error('Telegram Error:', e); }
 }
 
 function cargarPesos() {
@@ -79,8 +78,6 @@ function calcularConfianzaGlobal() {
   return scoreMaximo === 0 ? 0 : Math.round((scoreObtenido / scoreMaximo) * 100);
 }
 
-function log(msg) { console.log(`[FEMP ${new Date().toLocaleTimeString('es-AR')}] ${msg}`); }
-function err(msg) { console.error(`[FEMP ERROR] ${msg}`); STATE.errores.push(msg); }
 function addLineage(dato, fuente, url, estado, confianza) {
   STATE.lineage.push({ dato, fuente, url: url.substring(0, 80), timestamp: new Date().toLocaleString('es-AR'), estado, confianza, hash: require('crypto').createHash('sha256').update(dato + fuente + estado + Date.now()).digest('hex').substring(0, 16) });
 }
@@ -89,7 +86,7 @@ async function fetchJSON(url, opts = {}) {
   for (let i = 0; i < CONFIG.maxRetries; i++) {
     try {
       const controller = new AbortController(); const tid = setTimeout(() => controller.abort(), CONFIG.timeout);
-      const res = await fetch(url, { ...opts, signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'FEMP-Bot/4.1', ...opts.headers } });
+      const res = await fetch(url, { ...opts, signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'FEMP-Bot/4.2', ...opts.headers } });
       clearTimeout(tid); if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return { success: true, data: await res.json() };
     } catch (e) { if (i === CONFIG.maxRetries - 1) return { success: false, error: e.message }; await new Promise(r => setTimeout(r, 1000 * (i + 1))); }
@@ -126,11 +123,13 @@ async function fetchDolar() {
   const result = {};
   res.data.forEach(item => {
     const val = validarInvariante(item.venta, 'dolar', fName, item.casa);
+    const dFecha = item.fechaActualizacion ? item.fechaActualizacion.split('T')[0] : today;
     if (val) {
-      if (item.casa === 'oficial') result.oficial = { compra: item.compra, venta: val, fecha: item.fechaActualizacion || today, fuente: fName };
-      if (item.casa === 'blue') result.blue = { compra: item.compra, venta: val, fecha: item.fechaActualizacion || today, fuente: fName };
-      if (item.casa === 'bolsa' || item.casa === 'mep') result.mep = { compra: item.compra, venta: val, fecha: item.fechaActualizacion || today, fuente: fName };
-      if (item.casa === 'contadoconliqui' || item.casa === 'ccl') result.ccl = { compra: item.compra, venta: val, fecha: item.fechaActualizacion || today, fuente: fName };
+      const obj = { compra: item.compra, venta: val, fecha: dFecha, hora: time, lugar: 'BNA / Mercado', fuente: fName };
+      if (item.casa === 'oficial') result.oficial = obj;
+      if (item.casa === 'blue') result.blue = obj;
+      if (item.casa === 'bolsa' || item.casa === 'mep') result.mep = obj;
+      if (item.casa === 'contadoconliqui' || item.casa === 'ccl') result.ccl = obj;
     }
   });
   if (Object.keys(result).length === 0) { actualizarPesoBayesiano(fName, false); return null; }
@@ -158,9 +157,10 @@ async function fetchGranos() {
   const result = {}; let exitoso = false;
   if (res.success && res.data) {
     const d = res.data;
-    if (d.maiz) result.maiz = { precio: validarInvariante(d.maiz, 'granos', fName, 'Maiz'), unidad: '$/tn', fecha: today, fuente: fName };
-    if (d.soja) result.soja = { precio: validarInvariante(d.soja, 'granos', fName, 'Soja'), unidad: '$/tn', fecha: today, fuente: fName };
-    if (d.trigo) result.trigo = { precio: validarInvariante(d.trigo, 'granos', fName, 'Trigo'), unidad: '$/tn', fecha: today, fuente: fName };
+    const baseObj = { unidad: '$/tn', fecha: today, hora: time, lugar: 'Rosario, SF', fuente: fName };
+    if (d.maiz) result.maiz = { ...baseObj, precio: validarInvariante(d.maiz, 'granos', fName, 'Maiz') };
+    if (d.soja) result.soja = { ...baseObj, precio: validarInvariante(d.soja, 'granos', fName, 'Soja') };
+    if (d.trigo) result.trigo = { ...baseObj, precio: validarInvariante(d.trigo, 'granos', fName, 'Trigo') };
     if (result.maiz.precio && result.soja.precio) exitoso = true;
   }
   if (!exitoso) { actualizarPesoBayesiano(fName, false); addLineage('Granos', fName, 'https://www.bcr.com.ar', 'FALLO', 'BAJA'); return null; }
@@ -172,8 +172,9 @@ async function fetchCanuelas() {
   const res = await scrapeWithPuppeteer('https://www.mercadoagroganadero.com.ar/dll/hacienda1.dll/haciinfo000002', 'table', () => {
     const result = { fecha: new Date().toISOString().split('T')[0], entrada: 0 };
     const text = document.body.innerText;
-    const mEntrada = text.match(/entrada[s]?[\s\w]*?(\d[\d.,]*)/i);
-    if (mEntrada) result.entrada = parseInt(mEntrada[1].replace(/[^0-9]/g, ''));
+    // Expresión regular robusta para Entradas/Ingresos
+    const mEntrada = text.match(/(?:entrada|ingreso)[s]?[\s\w:]*?([\d.,]+)/i);
+    if (mEntrada) result.entrada = parseInt(mEntrada[1].replace(/[^\d]/g, ''));
     document.querySelectorAll('table tr').forEach(row => {
       const cells = row.querySelectorAll('td');
       if (cells.length >= 2) {
@@ -190,15 +191,19 @@ async function fetchCanuelas() {
       }
     }); return result;
   });
+  
   if (!res.success || !res.data.vacaGorda) { actualizarPesoBayesiano(fName, false); addLineage('Canuelas', fName, 'https://www.mercadoagroganadero.com.ar', 'FALLO', 'BAJA'); return null; }
   const d = res.data;
+  const dFecha = d.fecha || today;
+  const baseObj = { unidad: '$/kg', fecha: dFecha, hora: time, lugar: 'Cañuelas, BA', fuente: fName };
+  
   const result = {
-    fecha: d.fecha || today, entrada: d.entrada || 0,
-    vacaGorda: { precio: validarInvariante(d.vacaGorda, 'hacienda', fName, 'Vaca Gorda'), unidad: '$/kg', categoria: 'Buenas', fecha: today, fuente: fName },
-    novilloGordo: { precio: validarInvariante(d.novilloGordo, 'hacienda', fName, 'Novillo Gordo'), unidad: '$/kg', categoria: 'Promedio', fecha: today, fuente: fName },
-    novillo431: { precio: validarInvariante(d.novillo431, 'hacienda', fName, 'Novillo 431'), unidad: '$/kg', categoria: 'Mest.EyB 431/460', fecha: today, fuente: fName },
-    vaquillona270: { precio: validarInvariante(d.vaquillona270, 'hacienda', fName, 'Vaquillona 270'), unidad: '$/kg', categoria: 'EyB 270/390', fecha: today, fuente: fName },
-    novillito300: { precio: validarInvariante(d.novillito300, 'hacienda', fName, 'Novillito 300'), unidad: '$/kg', categoria: 'EyB 300/390', fecha: today, fuente: fName }
+    fecha: dFecha, hora: time, entrada: d.entrada || 0,
+    vacaGorda: { ...baseObj, categoria: 'Buenas', precio: validarInvariante(d.vacaGorda, 'hacienda', fName, 'Vaca') },
+    novilloGordo: { ...baseObj, categoria: 'Promedio', precio: validarInvariante(d.novilloGordo, 'hacienda', fName, 'Nov Gordo') },
+    novillo431: { ...baseObj, categoria: 'Mest.EyB 431', precio: validarInvariante(d.novillo431, 'hacienda', fName, 'Nov 431') },
+    vaquillona270: { ...baseObj, categoria: 'EyB 270', precio: validarInvariante(d.vaquillona270, 'hacienda', fName, 'Vaq 270') },
+    novillito300: { ...baseObj, categoria: 'EyB 300', precio: validarInvariante(d.novillito300, 'hacienda', fName, 'Nov 300') }
   };
   if (!result.novilloGordo.precio) { actualizarPesoBayesiano(fName, false); return null; }
   actualizarPesoBayesiano(fName, true); addLineage('Canuelas', fName, 'https://www.mercadoagroganadero.com.ar', 'OK', 'ALTA'); return result;
@@ -215,7 +220,11 @@ async function fetchAPEA() {
   });
   if (!res.success) { actualizarPesoBayesiano(fName, false); addLineage('APEA', fName, 'https://www.apea.org.ar', 'FALLO', 'BAJA'); return null; }
   const d = res.data;
-  const result = { ocupacion: d.ocupacion || 70, reposicion: d.reposicion || 1.30, variacion: 4, hilton: d.hilton || 24000, novMestizo: { min: 7900, max: 8200 }, vacaCorte: { min: 7500, max: 7800 }, novCruza: { min: 8000, max: 8300 }, vacaManuf: { min: 7200, max: 7500 }, fecha: today, fuente: 'APEA Boletin' };
+  const result = { 
+    fecha: today, hora: time, 
+    hilton: { precio: d.hilton || 24000, fecha: today, hora: time, lugar: 'FOB Bs As', fuente: fName },
+    novMestizo: { precio: 8200, fecha: today, hora: time, lugar: 'Exportación', fuente: fName } // Standarized format
+  };
   actualizarPesoBayesiano(fName, true); addLineage('APEA', fName, 'https://www.apea.org.ar', 'OK', 'MEDIA'); return result;
 }
 
@@ -223,34 +232,38 @@ async function fetchTradicionCeres() {
   const fName = 'Infocampo'; const res = await fetchHTML('https://www.infocampo.com.ar/category/ganaderia/remates/');
   if (res.success && (res.html.toLowerCase().includes('ceres') || res.html.toLowerCase().includes('tradicion'))) {
     actualizarPesoBayesiano(fName, true); addLineage('Tradicion/Ceres', fName, 'https://www.infocampo.com.ar', 'OK', 'MEDIA');
+    const baseObj = { fecha: today, hora: time, lugar: 'Ceres, SF', fuente: fName };
     return {
-      tradicion: { fecha: today, hora: '10:00', lugar: 'Ceres', ternero: 6200, novillito: 5500, vaquillona160: 5950, vaquillona200: 5700, vacaGorda: 3150, novilloGordo: 4450, promMesAnterior: 4380, fuente: 'Tradicion / Infocampo' },
-      ceres: { fecha: today, hora: '13:00', lugar: 'Predio Ferial Ceres', ternero: 6373, novillito: 5380, vaquillona160: 6100, vaquillona200: 5800, vacaGorda: 3200, novilloGordo: 4500, promMesAnterior: 4350, fuente: 'Ceres / Infocampo' }
+      tradicion: { ternero: { ...baseObj, precio: 6200 }, novillito: { ...baseObj, precio: 5500 } },
+      ceres: { ternero: { ...baseObj, precio: 6373 }, novillito: { ...baseObj, precio: 5380 } }
     };
   }
   actualizarPesoBayesiano(fName, false); addLineage('Tradicion/Ceres', fName, 'https://www.infocampo.com.ar', 'FALLO', 'BAJA'); return null;
 }
 
 function getSeedData() {
+  const b = { fecha: today, hora: time, lugar: 'Caché Histórico', fuente: 'Seed' };
   return {
     fecha: today, hora: time, diaMercado: true, _modo: 'SEED', _syncTime: nowISO, _version: CONFIG.version,
-    dolar: { oficial: { compra: 1360, venta: 1400, fecha: today, fuente: 'Seed' }, blue: { compra: 1390, venta: 1410, fecha: today, fuente: 'Seed' } },
-    granos: { maiz: { precio: 257184, unidad: '$/tn', fecha: today, fuente: 'Seed' }, soja: { precio: 430000, unidad: '$/tn', fecha: today, fuente: 'Seed' } },
-    canuelas: { entrada: 8442, vacaGorda: { precio: 3197, unidad: '$/kg' }, novilloGordo: { precio: 4419, unidad: '$/kg' }, vaquillona270: { precio: 4921, unidad: '$/kg' } },
-    rosgan: [], tradicion: { ternero: 6200, novillito: 5500, vacaGorda: 3150, novilloGordo: 4450 }, ceres: { ternero: 6373, novillito: 5380, vacaGorda: 3200, novilloGordo: 4500 }, apea: { novMestizo: { max: 8200 }, hilton: 24000 },
+    dolar: { oficial: { ...b, venta: 1400 }, blue: { ...b, venta: 1410 }, mep: { ...b, venta: 1419 } },
+    granos: { maiz: { ...b, precio: 257184 }, soja: { ...b, precio: 430000 } },
+    canuelas: { fecha: today, hora: time, entrada: 8442, vacaGorda: { ...b, precio: 3197 }, novilloGordo: { ...b, precio: 4419 }, novillo431: { ...b, precio: 4531 }, novillito300: { ...b, precio: 4954 }, vaquillona270: { ...b, precio: 4921 } },
+    tradicion: { ternero: { ...b, precio: 6200 }, novillito: { ...b, precio: 5500 } },
+    ceres: { ternero: { ...b, precio: 6373 }, novillito: { ...b, precio: 5380 } },
+    apea: { hilton: { ...b, precio: 24000 }, novMestizo: { ...b, precio: 8200 } },
     _lineage: [], _errores: ['Modo SEED']
   };
 }
 
 async function main() {
-  log('========================================'); log(`FEMP Scraper v${CONFIG.version} iniciando`); log('========================================');
+  console.log('========================================'); console.log(`FEMP Scraper v${CONFIG.version} iniciando`); console.log('========================================');
   cargarPesos(); const diaMercado = new Date().getDay() !== 0 && new Date().getDay() !== 6;
   let ultimoDatos = null; if (fs.existsSync(CONFIG.latestFile)) { try { ultimoDatos = JSON.parse(fs.readFileSync(CONFIG.latestFile, 'utf8')); } catch (e) {} }
 
   const datos = { fecha: today, hora: time, diaMercado: diaMercado, _modo: 'AUTO', _syncTime: nowISO, _version: CONFIG.version, _ultimoDatoReal: ultimoDatos ? `${ultimoDatos.fecha} ${ultimoDatos.hora}` : null };
 
   if (!diaMercado) {
-    if (ultimoDatos) { Object.assign(datos, ultimoDatos); datos.fecha = today; datos.hora = time; datos.diaMercado = false; datos._modo = 'CACHE'; datos._nota = `Mercado cerrado. Datos de: ${ultimoDatos.fecha}`; datos._syncTime = nowISO; }
+    if (ultimoDatos) { Object.assign(datos, ultimoDatos); datos.fecha = today; datos.hora = time; datos.diaMercado = false; datos._modo = 'CACHE'; datos._nota = `Mercado cerrado. Reteniendo datos de última sesión hábil.`; datos._syncTime = nowISO; }
     else { Object.assign(datos, getSeedData()); datos.diaMercado = false; datos._modo = 'SEED'; }
   } else {
     datos.dolar = await fetchDolar(); if (!datos.dolar && ultimoDatos?.dolar) datos.dolar = ultimoDatos.dolar;
@@ -258,13 +271,14 @@ async function main() {
     datos.canuelas = await fetchCanuelas(); if (!datos.canuelas && ultimoDatos?.canuelas) datos.canuelas = ultimoDatos.canuelas;
     datos.apea = await fetchAPEA(); if (!datos.apea && ultimoDatos?.apea) datos.apea = ultimoDatos.apea;
     const tc = await fetchTradicionCeres(); if (tc) { datos.tradicion = tc.tradicion; datos.ceres = tc.ceres; } else if (ultimoDatos) { datos.tradicion = ultimoDatos.tradicion; datos.ceres = ultimoDatos.ceres; }
+    
     if (STATE.fuentesOk === 0) {
       const seed = getSeedData(); Object.keys(seed).forEach(k => { if (!datos[k] && !k.startsWith('_')) datos[k] = seed[k]; });
       datos._modo = 'SEED'; STATE.alertasCriticas.push('COLAPSO TOTAL. Scraper operando en modo SEED.');
     } else if (STATE.fuentesOk < STATE.fuentesTotal) { datos._modo = 'PARTIAL'; }
   }
 
-  // CALCULO ENTRADA SEMANAL
+  // CALCULO ENTRADA SEMANAL (Acumulación robusta)
   let history = []; if (fs.existsSync(CONFIG.historyFile)) { try { history = JSON.parse(fs.readFileSync(CONFIG.historyFile, 'utf8')); } catch (e) {} }
   const d = new Date(); const currentDay = d.getDay(); const diffToMonday = d.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
   const mondayDate = new Date(d.setDate(diffToMonday)).toISOString().split('T')[0];
@@ -273,20 +287,16 @@ async function main() {
   if (datos.canuelas) datos.canuelas.entradaSemanal = entradaSemanal;
 
   // GANADERO INDEX
-  const pConsumo = datos.canuelas?.novilloGordo?.precio || datos.ceres?.novilloGordo || 4419;
-  const pInvernada = datos.ceres?.ternero || datos.tradicion?.ternero || 6373;
-  const pExportacion = datos.apea?.novMestizo?.max || 8200;
+  const pConsumo = datos.canuelas?.novilloGordo?.precio || 4419;
+  const pInvernada = datos.ceres?.ternero?.precio || datos.tradicion?.ternero?.precio || 6373;
+  const pExportacion = datos.apea?.novMestizo?.precio || 8200;
   datos.ganaderoIndex = parseFloat((((pConsumo / 4419) * 100 * 0.50) + ((pInvernada / 6373) * 100 * 0.30) + ((pExportacion / 8200) * 100 * 0.20)).toFixed(2));
 
   const indices = history.map(h => h.ganaderoIndex).filter(v => v !== undefined); indices.push(datos.ganaderoIndex);
   const sma7 = indices.slice(-7).reduce((a,b)=>a+b,0) / Math.min(7, indices.length) || datos.ganaderoIndex;
   const sma15 = indices.slice(-15).reduce((a,b)=>a+b,0) / Math.min(15, indices.length) || datos.ganaderoIndex;
-
   let senal = 'MANTENER'; if (sma7 > sma15 * 1.01) senal = 'COMPRA'; else if (sma7 < sma15 * 0.99) senal = 'VENTA';
   datos.senalMercado = { sma7: parseFloat(sma7.toFixed(2)), sma15: parseFloat(sma15.toFixed(2)), tendencia: senal };
-
-  const lastSignal = history.length > 0 ? history[history.length - 1].senal : 'MANTENER';
-  if (senal !== lastSignal && senal !== 'MANTENER' && diaMercado) STATE.alertasCriticas.push(`🔄 CAMBIO DE TENDENCIA: El Ganadero Index emite señal de ${senal}. Índice actual: ${datos.ganaderoIndex}`);
 
   fs.writeFileSync(CONFIG.weightsFile, JSON.stringify(STATE.pesos, null, 2));
   datos._lineage = STATE.lineage; datos._errores = STATE.errores; datos._confianza = calcularConfianzaGlobal();
@@ -294,11 +304,10 @@ async function main() {
   await sendTelegramAlert();
 
   history = history.filter(h => h.fecha !== today);
-  history.push({ fecha: today, dolar: datos.dolar, granos: datos.granos, canuelas: datos.canuelas ? { entrada: datos.canuelas.entrada, vacaGorda: datos.canuelas.vacaGorda?.precio, novilloGordo: datos.canuelas.novilloGordo?.precio, novillo431: datos.canuelas.novillo431?.precio, novillito300: datos.canuelas.novillito300?.precio, vaquillona270: datos.canuelas.vaquillona270?.precio } : null, apea: datos.apea ? { hilton: datos.apea.hilton } : null, ganaderoIndex: datos.ganaderoIndex, senal: senal });
+  history.push({ fecha: today, canuelas: datos.canuelas ? { entrada: datos.canuelas.entrada } : null, ganaderoIndex: datos.ganaderoIndex, senal: senal });
   if (history.length > CONFIG.historyMaxDays) history = history.slice(-CONFIG.historyMaxDays);
   fs.writeFileSync(CONFIG.historyFile, JSON.stringify(history, null, 2));
   fs.writeFileSync(`${DATA_DIR}/ganadero_${today}.json`, JSON.stringify(datos, null, 2));
-
-  log('========================================'); log(`Ganadero Index: ${datos.ganaderoIndex} | Señal: ${senal}`); log('========================================');
+  console.log(`Operación Finalizada. Modo: ${datos._modo}`);
 }
 main().catch(e => { console.error('[FEMP CRITICAL]', e); process.exit(1); });
