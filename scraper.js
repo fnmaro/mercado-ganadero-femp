@@ -1,6 +1,7 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const puppeteer = require('puppeteer');
+const { INVARIANTES, validarInvariante } = require('./data/invariantes.js');
 
 const DATA_DIR = './data';
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -9,9 +10,6 @@ const today = new Date().toISOString().split('T')[0];
 const time = new Date().toLocaleTimeString('es-AR', { hour12: false });
 const nowISO = new Date().toISOString();
 
-// ============================================================
-// FEMP CONFIGURACIÓN - INVARIANTES Y UMBRALES
-// ============================================================
 const CONFIG = {
   version: '3.1.0-FEMP-FAILSAFE',
   maxRetries: 3,
@@ -19,21 +17,7 @@ const CONFIG = {
   historyMaxDays: 90,
   seedFile: './data/seed.json',
   latestFile: './data/latest.json',
-  historyFile: './data/history.json',
-  // FEMP #3: Definición explícita de errores inaceptables
-  invariantes: {
-    dolar: { min: 500, max: 5000, accion: 'KILL' },
-    granos: {
-      maiz: { min: 50000, max: 600000 },
-      soja: { min: 100000, max: 800000 },
-      trigo: { min: 40000, max: 500000 }
-    },
-    hacienda: {
-      vacaGorda: { min: 1000, max: 8000 },
-      novilloGordo: { min: 1500, max: 10000 },
-      ternero: { min: 3000, max: 15000 }
-    }
-  }
+  historyFile: './data/history.json'
 };
 
 const STATE = {
@@ -48,7 +32,6 @@ const STATE = {
 function log(msg) { console.log(`[FEMP ${new Date().toLocaleTimeString('es-AR')}] ${msg}`); }
 function err(msg) { console.error(`[FEMP ERROR] ${msg}`); STATE.errores.push(msg); }
 
-// FEMP #14 + #3: Trazabilidad con hash
 function addLineage(dato, fuente, url, estado, confianza) {
   const entry = {
     dato, fuente, url: url.substring(0, 80),
@@ -60,7 +43,6 @@ function addLineage(dato, fuente, url, estado, confianza) {
   return entry.hash;
 }
 
-// FEMP #3: Checksum entre etapas (zero-trust validation)
 function checksum(data) {
   return crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex').substring(0, 16);
 }
@@ -73,7 +55,8 @@ async function fetchJSON(url, opts = {}) {
       const res = await fetch(url, { ...opts, signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'FEMP-Bot/3.1', ...opts.headers } });
       clearTimeout(tid);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return { success: true, data: await res.json(), checksum: checksum(await res.text()) };
+      const text = await res.text();
+      return { success: true, data: JSON.parse(text), checksum: checksum(text) };
     } catch (e) {
       if (i === CONFIG.maxRetries - 1) return { success: false, error: e.message };
       await new Promise(r => setTimeout(r, 1000 * (i + 1)));
@@ -121,23 +104,6 @@ async function scrapeWithPuppeteer(url, waitForSelector, extractFn) {
   }
 }
 
-// FEMP #3: Validación fail-fast de invariantes
-function validarInvariante(nombre, valor, rango) {
-  if (valor === null || valor === undefined || isNaN(valor)) {
-    err(`INVARIANTE NULL: ${nombre} es nulo o inválido`);
-    return false;
-  }
-  if (rango.min !== undefined && valor < rango.min) {
-    err(`INVARIANTE MIN: ${nombre}=${valor} < ${rango.min}`);
-    return false;
-  }
-  if (rango.max !== undefined && valor > rango.max) {
-    err(`INVARIANTE MAX: ${nombre}=${valor} > ${rango.max}`);
-    return false;
-  }
-  return true;
-}
-
 async function fetchDolar() {
   STATE.fuentesTotal++;
   const res = await fetchJSON('https://dolarapi.com/v1/dolares');
@@ -159,8 +125,9 @@ async function fetchDolar() {
     return null;
   }
   
-  // FEMP #3: Validación de invariante
-  if (!validarInvariante('Dolar Oficial', result.oficial?.venta, CONFIG.invariantes.dolar)) {
+  const valResult = validarInvariante('Dolar Oficial', result.oficial?.venta, INVARIANTES.dolar);
+  if (!valResult.valido) {
+    err(`INVARIANTE: ${valResult.mensaje}`);
     addLineage('Dolar', 'DolarAPI', 'https://dolarapi.com/v1/dolares', 'INVARIANTE', 'CRITICA');
     return null;
   }
@@ -204,9 +171,20 @@ async function fetchGranosBCR() {
   if (res.data.soja) result.soja = { precio: res.data.soja, unidad: '$/tn', fecha: today, fuente: 'BCR Rosario' };
   if (res.data.trigo) result.trigo = { precio: res.data.trigo, unidad: '$/tn', fecha: today, fuente: 'BCR Rosario' };
   
-  // FEMP #3: Validación
-  if (result.maiz && !validarInvariante('Maiz', result.maiz.precio, CONFIG.invariantes.granos.maiz)) return null;
-  if (result.soja && !validarInvariante('Soja', result.soja.precio, CONFIG.invariantes.granos.soja)) return null;
+  if (result.maiz) {
+    const valMaiz = validarInvariante('Maiz', result.maiz.precio, INVARIANTES.granos.maiz);
+    if (!valMaiz.valido) {
+      err(`INVARIANTE: ${valMaiz.mensaje}`);
+      return null;
+    }
+  }
+  if (result.soja) {
+    const valSoja = validarInvariante('Soja', result.soja.precio, INVARIANTES.granos.soja);
+    if (!valSoja.valido) {
+      err(`INVARIANTE: ${valSoja.mensaje}`);
+      return null;
+    }
+  }
   
   STATE.fuentesOk++;
   addLineage('Granos', 'BCR Rosario', 'https://www.bcr.com.ar', 'OK', 'ALTA');
@@ -289,9 +267,16 @@ async function fetchCanuelas() {
   }
   const d = res.data;
   
-  // FEMP #3: Validación
-  if (!validarInvariante('Vaca Gorda Canuelas', d.vacaGorda, CONFIG.invariantes.hacienda.vacaGorda)) return null;
-  if (!validarInvariante('Novillo Gordo Canuelas', d.novilloGordo, CONFIG.invariantes.hacienda.novilloGordo)) return null;
+  const valVaca = validarInvariante('Vaca Gorda Canuelas', d.vacaGorda, INVARIANTES.hacienda.vacaGorda);
+  if (!valVaca.valido) {
+    err(`INVARIANTE: ${valVaca.mensaje}`);
+    return null;
+  }
+  const valNov = validarInvariante('Novillo Gordo Canuelas', d.novilloGordo, INVARIANTES.hacienda.novilloGordo);
+  if (!valNov.valido) {
+    err(`INVARIANTE: ${valNov.mensaje}`);
+    return null;
+  }
   
   const result = {
     fecha: d.fecha || today,
@@ -619,7 +604,6 @@ async function main() {
   datos._errores = STATE.errores;
   datos._confianza = Math.round((STATE.fuentesOk / Math.max(STATE.fuentesTotal, 1)) * 100);
   
-  // FEMP #3: Si confianza < 30%, forzar modo SEED
   if (datos._confianza < 30 && datos._modo !== 'SEED') {
     datos._modo = 'FAIL';
     datos._nota = (datos._nota || '') + ' [FAILSAFE] Confianza crítica. Datos no operables.';
