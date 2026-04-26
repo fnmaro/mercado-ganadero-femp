@@ -115,10 +115,143 @@
   },
   {
     "fecha": "2026-04-26",
-    "canuelas": {
-      "entrada": 8442
+    "dolar": {
+      "oficial": {
+        "compra": 1370,
+        "venta": 1420,
+        "fecha": "2026-04-24T17:00:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "blue": {
+        "compra": 1400,
+        "venta": 1420,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "mep": {
+        "compra": 1437,
+        "venta": 1441.4,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      },
+      "ccl": {
+        "compra": 1494.6,
+        "venta": 1495.8,
+        "fecha": "2026-04-24T20:58:00.000Z",
+        "fuente": "DolarAPI"
+      }
     },
-    "ganaderoIndex": 100,
+    "granos": {
+      "maiz": {
+        "precio": 253480,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      },
+      "soja": {
+        "precio": 430000,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      },
+      "trigo": {
+        "precio": 264330,
+        "unidad": "$/tn",
+        "fecha": "2026-04-24",
+        "fuente": "BCR Rosario"
+      }
+    },
+    "canuelas": {
+      "fecha": "2026-04-24",
+      "entrada": 8442,
+      "vacaGorda": {
+        "precio": 3197,
+        "unidad": "$/kg",
+        "categoria": "Buenas",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "novilloGordo": {
+        "precio": 4419,
+        "unidad": "$/kg",
+        "categoria": "Promedio General",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "novillo431": {
+        "precio": 4531,
+        "unidad": "$/kg",
+        "categoria": "Mest.EyB 431/460",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "vaquillona270": {
+        "precio": 4921,
+        "unidad": "$/kg",
+        "categoria": "EyB 270/390",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "novillito300": {
+        "precio": 4954,
+        "unidad": "$/kg",
+        "categoria": "EyB 300/390",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "entradaSemanal": 8442
+    },
+    "apea": {
+      "ocupacion": 70,
+      "reposicion": 1.3,
+      "variacion": 4,
+      "hilton": 24000,
+      "novMestizo": {
+        "min": 7900,
+        "max": 8200
+      },
+      "vacaCorte": {
+        "min": 7500,
+        "max": 7800
+      },
+      "novCruza": {
+        "min": 8000,
+        "max": 8300
+      },
+      "vacaManuf": {
+        "min": 7200,
+        "max": 7500
+      },
+      "fecha": "2026-04-24",
+      "fuente": "APEA Boletin"
+    },
+    "tradicion": {
+      "fecha": "2026-04-24",
+      "hora": "10:00",
+      "lugar": "Ceres, Santa Fe",
+      "ternero": 6200,
+      "novillito": 5500,
+      "vaquillona160": 5950,
+      "vaquillona200": 5700,
+      "vacaGorda": 3150,
+      "novilloGordo": 4450,
+      "promMesAnterior": 4380,
+      "fuente": "Tradicion (seed)"
+    },
+    "ceres": {
+      "fecha": "2026-04-24",
+      "hora": "13:00",
+      "lugar": "Predio Ferial Ceres",
+      "ternero": 6373,
+      "novillito": 5380,
+      "vaquillona160": 6100,
+      "vaquillona200": 5800,
+      "vacaGorda": 3200,
+      "novilloGordo": 4500,
+      "promMesAnterior": 4350,
+      "fuente": "Ceres (seed)"
+    },
+    "ganaderoIndex": null,
     "senal": "MANTENER"
   }
 ]
