@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.3</title>
+    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.3.1</title>
     <style>
         :root { --bg: #0f0f1a; --bg-card: rgba(20,20,40,0.85); --border: rgba(255,255,255,0.08); --text: #e0e0e0; --text-dim: #888; --gold: #ffd700; --green: #00ff88; --red: #ff4757; --yellow: #ffd700; --blue: #74b9ff; --purple: #a29bfe; --font: 'Segoe UI', system-ui, sans-serif; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,7 +34,7 @@
 <body>
     <div class="header">
         <h1>🐄 Mercado Ganadero en Tiempo Real</h1>
-        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.3</div>
+        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.3.1</div>
         <div class="datetime" id="dt">Inicializando motor...</div>
     </div>
     
@@ -114,7 +114,12 @@
     <script>
     const FEMP = {
         config: { url: './data/latest.json' },
-        fmt(v) { return (v !== undefined && v !== null && !isNaN(v)) ? Number(v).toLocaleString('es-AR') : '--'; },
+        
+        // PARCHE ANTI-NaN: Formateo seguro
+        fmt(v) { 
+            const n = Number(v);
+            return (!isNaN(n) && v !== null && v !== undefined) ? n.toLocaleString('es-AR') : '--'; 
+        },
         
         // MOTOR DE SEMÁFOROS
         getSemaphore(val, thresholds, isPercentage = false) {
@@ -129,7 +134,6 @@
         setVal(vId, mId, obj, prefix = '$', suffix = '') {
             if (!obj) { document.getElementById(vId).textContent = '--'; if(mId) document.getElementById(mId).textContent = 'Sin datos'; return; }
             
-            // Detección de caché viejo (solo número) vs nuevo (objeto granular)
             const isOldCache = typeof obj === 'number';
             const val = isOldCache ? obj : (obj.precio || obj.venta);
             
@@ -208,14 +212,18 @@
             this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
             this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
 
-            // CÁLCULOS MACRO Y SEMÁFOROS
-            const ext = (obj) => typeof obj === 'number' ? obj : (obj?.precio || obj?.venta || 0);
+            // CÁLCULOS MACRO Y SEMÁFOROS (PARCHE ANTI-NaN)
+            const ext = (obj, fallback) => {
+                const val = typeof obj === 'number' ? obj : (obj?.precio || obj?.venta);
+                const num = parseFloat(val);
+                return (!isNaN(num) && num > 0) ? num : fallback;
+            };
             
-            const ter = ext(d.ceres?.ternero) || ext(d.tradicion?.ternero) || 6373;
-            const novG = ext(d.canuelas?.novilloGordo) || 4419;
-            const mK = (ext(d.granos?.maiz) || 257184) / 1000;
-            const dof = ext(d.dolar?.oficial) || 1400;
-            const dbl = ext(d.dolar?.blue) || 1410;
+            const ter = ext(d.ceres?.ternero || d.tradicion?.ternero, 6373);
+            const novG = ext(d.canuelas?.novilloGordo, 4419);
+            const mK = ext(d.granos?.maiz, 257184) / 1000;
+            const dof = ext(d.dolar?.oficial, 1400);
+            const dbl = ext(d.dolar?.blue, 1410);
 
             const valRep = parseFloat((ter / novG).toFixed(2));
             const valMt = parseFloat((ter / mK).toFixed(1));
