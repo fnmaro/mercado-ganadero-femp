@@ -1,9 +1,9 @@
 {
   "fecha": "2026-04-26",
-  "hora": "22:57:27",
+  "hora": "23:15:31",
   "diaMercado": false,
   "_modo": "CACHE",
-  "_syncTime": "2026-04-26T22:57:27.548Z",
+  "_syncTime": "2026-04-26T23:15:31.903Z",
   "_version": "3.0.0-FEMP",
   "_ultimoDatoReal": "2026-04-24 23:25:57",
   "dolar": {
@@ -89,7 +89,8 @@
       "categoria": "EyB 300/390",
       "fecha": "2026-04-24",
       "fuente": "Canuelas (seed)"
-    }
+    },
+    "entradaSemanal": 8442
   },
   "apea": {
     "ocupacion": 70,
