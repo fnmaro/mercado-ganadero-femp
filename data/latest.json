@@ -1,23 +1,23 @@
 {
   "fecha": "2026-04-27",
-  "hora": "10:48",
+  "hora": "11:05",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-27T10:48:41.159Z",
+  "_syncTime": "2026-04-27T11:05:30.393Z",
   "_version": "4.4.0-FEMP-Absolute",
   "dolar": {
     "oficial": {
       "precio": 1420,
       "compra": 1370,
       "fecha": "2026-04-24",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
     "blue": {
       "precio": 1420,
       "fecha": "2026-04-26",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
@@ -25,7 +25,7 @@
       "precio": 1441.4,
       "compra": 1437,
       "fecha": "2026-04-26",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     }
@@ -34,14 +34,14 @@
     "maiz": {
       "precio": 253480,
       "fecha": "2026-04-27",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     },
     "soja": {
       "precio": 430000,
       "fecha": "2026-04-27",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     }
@@ -90,21 +90,21 @@
     "hilton": {
       "precio": 24000,
       "fecha": "2026-04-27",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "FOB Bs As",
       "fuente": "APEA.org.ar"
     },
     "novMestizo": {
       "precio": 8200,
       "fecha": "2026-04-27",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     },
     "vacaConserva": {
       "precio": 3100,
       "fecha": "2026-04-27",
-      "hora": "10:48",
+      "hora": "11:05",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     }
@@ -139,7 +139,7 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com",
-      "timestamp": "27/4/2026, 10:48:41",
+      "timestamp": "27/4/2026, 11:05:30",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -147,7 +147,7 @@
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "27/4/2026, 10:48:49",
+      "timestamp": "27/4/2026, 11:05:38",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -155,7 +155,7 @@
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "27/4/2026, 10:48:51",
+      "timestamp": "27/4/2026, 11:05:41",
       "estado": "FALLO",
       "confianza": "BAJA"
     },
@@ -163,11 +163,11 @@
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "27/4/2026, 10:48:54",
+      "timestamp": "27/4/2026, 11:05:44",
       "estado": "OK",
       "confianza": "MEDIA"
     }
   ],
   "_errores": [],
-  "_confianza": 81
+  "_confianza": 88
 }
