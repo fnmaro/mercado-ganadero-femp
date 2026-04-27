@@ -113,20 +113,53 @@ async function fetchGranos() {
 async function fetchCanuelas() {
   const f = 'Mercado Agroganadero';
   const res = await scrapeWithPuppeteer('https://www.mercadoagroganadero.com.ar/dll/hacienda1.dll/haciinfo000002', 'table', () => {
-    const r = { fecha: new Date().toISOString().split('T')[0], entrada: 0 };
-    // Regex blindada para capturar entradas/cabezas
-    const mEntrada = document.body.innerText.match(/(?:entrada|ingreso|cabeza)[s]?\s*[:=]?\s*([\d.,]+)/i);
-    if (mEntrada) r.entrada = parseInt(mEntrada[1].replace(/[^\d]/g, ''));
-    document.querySelectorAll('table tr').forEach(row => { const c = row.querySelectorAll('td'); if (c.length >= 2) { const l = c[0].textContent.toLowerCase(); const v = parseFloat(c[c.length - 1].textContent.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')); if (!isNaN(v)) { if (l.includes('vaca') && (l.includes('buena') || l.includes('gorda'))) r.vacaGorda = v; if (l.includes('novillo') && l.includes('gordo')) r.novilloGordo = v; if (l.includes('431') || l.includes('460')) r.novillo431 = v; if (l.includes('vaquillona') && l.includes('270')) r.vaquillona270 = v; if (l.includes('novillito') && l.includes('300')) r.novillito300 = v; } } }); return r;
+    const r = { entrada: 0 };
+    const text = document.body.innerText.toLowerCase();
+    // Búsqueda agresiva y tolerante a fallos para cabezas/ingresos
+    const mEntrada = text.match(/(?:ingreso|entrada|cabezas)[\s\S]{0,30}?(\d{1,3}(?:\.\d{3})*)/);
+    if (mEntrada) r.entrada = parseInt(mEntrada[1].replace(/\./g, ''));
+
+    document.querySelectorAll('table tr').forEach(row => {
+      const c = row.querySelectorAll('td');
+      if (c.length >= 2) {
+        const l = c[0].textContent.toLowerCase();
+        const valStr = c[c.length - 1].textContent.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.');
+        const v = parseFloat(valStr);
+        if (!isNaN(v) && v > 0) {
+          if (l.includes('vaca') && (l.includes('buena') || l.includes('gorda'))) r.vacaGorda = v;
+          if (l.includes('novillo') && l.includes('gordo')) r.novilloGordo = v;
+          if (l.includes('431') || l.includes('460')) r.novillo431 = v;
+          if (l.includes('vaquillona') && l.includes('270')) r.vaquillona270 = v;
+          if (l.includes('novillito') && l.includes('300')) r.novillito300 = v;
+        }
+      }
+    });
+    return r;
   });
-  if (!res.success || !res.data.vacaGorda) { actualizarPesoBayesiano(f, false); addLineage('Canuelas', f, 'https://www.mercadoagroganadero.com.ar', 'FALLO', 'BAJA'); return null; }
-  const d = res.data; const r = { fecha: d.fecha || today, hora: time, entrada: parseInt(d.entrada) || 0 };
+
+  if (!res.success || !res.data) {
+    actualizarPesoBayesiano(f, false);
+    addLineage('Canuelas', f, 'https://www.mercadoagroganadero.com.ar', 'FALLO', 'BAJA');
+    return null;
+  }
+
+  const d = res.data;
+  // Forzamos estrictamente a que la fecha y hora sean las del momento de la consulta
+  const r = {
+    fecha: today,
+    hora: time,
+    entrada: parseInt(d.entrada) || 0
+  };
+
   r.vacaGorda = normObj(validarInvariante(d.vacaGorda, 'hacienda', f, 'Vaca'), 3197, 'MAG Cañuelas', f);
   r.novilloGordo = normObj(validarInvariante(d.novilloGordo, 'hacienda', f, 'Nov Gordo'), 4419, 'MAG Cañuelas', f);
   r.novillo431 = normObj(validarInvariante(d.novillo431, 'hacienda', f, 'Nov 431'), 4531, 'MAG Cañuelas', f);
   r.vaquillona270 = normObj(validarInvariante(d.vaquillona270, 'hacienda', f, 'Vaq 270'), 4921, 'MAG Cañuelas', f);
   r.novillito300 = normObj(validarInvariante(d.novillito300, 'hacienda', f, 'Nov 300'), 4954, 'MAG Cañuelas', f);
-  actualizarPesoBayesiano(f, true); addLineage('Canuelas', f, 'https://www.mercadoagroganadero.com.ar', 'OK', 'ALTA'); return r;
+
+  actualizarPesoBayesiano(f, true);
+  addLineage('Canuelas', f, 'https://www.mercadoagroganadero.com.ar', 'OK', 'ALTA');
+  return r;
 }
 
 async function fetchAPEA() {
