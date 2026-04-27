@@ -11,7 +11,7 @@ const time = new Date().toLocaleTimeString('es-AR', { hour12: false }).substring
 const nowISO = new Date().toISOString();
 
 const CONFIG = {
-  version: '4.4.0-FEMP-Absolute',
+  version: '4.5.0-FEMP-Extended',
   maxRetries: 3,
   timeout: 25000,
   historyMaxDays: 90,
@@ -52,7 +52,7 @@ async function sendTelegramAlert() {
   if (STATE.alertasCriticas.length === 0) return;
   const token = process.env.TELEGRAM_TOKEN; const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return;
-  const msg = `🚨 *FEMP V4.4 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
+  const msg = `🚨 *FEMP V4.5 - Reporte Crítico*\n📅 ${today} | ⏱️ ${time}\n\n` + STATE.alertasCriticas.map(a => `• ${a}`).join('\n');
   try { await fetch(`https://api.telegram.org/bot${token}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' }) }); } catch (e) {}
 }
 
@@ -72,7 +72,7 @@ function addLineage(dato, fuente, url, estado, confianza) { STATE.lineage.push({
 
 async function fetchJSON(url) {
   for (let i = 0; i < CONFIG.maxRetries; i++) {
-    try { const controller = new AbortController(); const tid = setTimeout(() => controller.abort(), CONFIG.timeout); const res = await fetch(url, { signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'FEMP-Bot/4.4' } }); clearTimeout(tid); if (!res.ok) throw new Error(`HTTP ${res.status}`); return { success: true, data: await res.json() }; } catch (e) { if (i === CONFIG.maxRetries - 1) return { success: false }; await new Promise(r => setTimeout(r, 1000 * (i + 1))); }
+    try { const controller = new AbortController(); const tid = setTimeout(() => controller.abort(), CONFIG.timeout); const res = await fetch(url, { signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'FEMP-Bot/4.5' } }); clearTimeout(tid); if (!res.ok) throw new Error(`HTTP ${res.status}`); return { success: true, data: await res.json() }; } catch (e) { if (i === CONFIG.maxRetries - 1) return { success: false }; await new Promise(r => setTimeout(r, 1000 * (i + 1))); }
   }
 }
 async function scrapeWithPuppeteer(url, waitForSelector, extractFn) {
@@ -115,7 +115,6 @@ async function fetchCanuelas() {
   const res = await scrapeWithPuppeteer('https://www.mercadoagroganadero.com.ar/dll/hacienda1.dll/haciinfo000002', 'table', () => {
     const r = { entrada: 0 };
     const text = document.body.innerText.toLowerCase();
-    // Búsqueda agresiva y tolerante a fallos para cabezas/ingresos
     const mEntrada = text.match(/(?:ingreso|entrada|cabezas)[\s\S]{0,30}?(\d{1,3}(?:\.\d{3})*)/);
     if (mEntrada) r.entrada = parseInt(mEntrada[1].replace(/\./g, ''));
 
@@ -144,7 +143,6 @@ async function fetchCanuelas() {
   }
 
   const d = res.data;
-  // Forzamos estrictamente a que la fecha y hora sean las del momento de la consulta
   const r = {
     fecha: today,
     hora: time,
@@ -204,6 +202,46 @@ function getSeedData() {
   };
 }
 
+// NUEVO: Generar nodo categorías estructurado desde datos planos
+function buildCategorias(datos) {
+  const c = { consumo: {}, exportacion: {}, invernada: {} };
+  
+  // Consumo
+  if (datos.canuelas?.novilloGordo?.precio) {
+    c.consumo.novillo = { ...datos.canuelas.novilloGordo, price_type: datos.canuelas.novilloGordo.price_type || 'pie' };
+  }
+  if (datos.canuelas?.vacaGorda?.precio) {
+    c.consumo.vaca = { ...datos.canuelas.vacaGorda, price_type: datos.canuelas.vacaGorda.price_type || 'pie' };
+  }
+  
+  // Exportación
+  if (datos.apea?.novMestizo?.precio) {
+    c.exportacion.novillo = { ...datos.apea.novMestizo, price_type: datos.apea.novMestizo.price_type || 'gancho' };
+  }
+  if (datos.apea?.vacaConserva?.precio) {
+    c.exportacion.vaca = { ...datos.apea.vacaConserva, price_type: datos.apea.vacaConserva.price_type || 'pie' };
+  }
+  
+  // Invernada con rangos de peso
+  if (datos.ceres?.ternero?.precio) {
+    c.invernada.ternero = {
+      '160-180': { ...datos.ceres.ternero, weight_range: '160-180', price_type: datos.ceres.ternero.price_type || 'pie' }
+    };
+  }
+  if (datos.ceres?.novillito?.precio) {
+    c.invernada.novillito = {
+      '200-250': { ...datos.ceres.novillito, weight_range: '200-250', price_type: datos.ceres.novillito.price_type || 'pie' }
+    };
+  }
+  if (datos.ceres?.vaquillona?.precio) {
+    c.invernada.vaquillona = {
+      '270-390': { ...datos.ceres.vaquillona, weight_range: '270-390', price_type: datos.ceres.vaquillona.price_type || 'pie' }
+    };
+  }
+  
+  return c;
+}
+
 async function main() {
   console.log(`[FEMP v${CONFIG.version}] Iniciando SANITIZACIÓN...`); cargarPesos();
   const diaMercado = new Date().getDay() !== 0 && new Date().getDay() !== 6;
@@ -231,9 +269,18 @@ async function main() {
   datos.ceres.ternero = normObj(datos.ceres.ternero, 6373, 'Predio Ceres, SF', 'Infocampo / Tradición');
   datos.apea.novMestizo = normObj(datos.apea.novMestizo, 8200, 'Expo Bs As', 'APEA.org.ar');
 
- // CÁLCULO DE ENTRADA SEMANAL BLINDADA (Acumulando enteros estrictos)
-  let history = []; if (fs.existsSync(CONFIG.historyFile)) { try { history = JSON.parse(fs.readFileSync(CONFIG.historyFile, 'utf8')); } catch (e) {} }
-  const d = new Date(); const currentDay = d.getDay(); const diffToMonday = d.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+  // NUEVO: Generar estructura de categorías para el dashboard extendido
+  datos.categorias = buildCategorias(datos);
+
+  // CÁLCULO DE ENTRADA SEMANAL BLINDADA (Acumulando enteros estrictos)
+  let history = []; 
+  if (fs.existsSync(CONFIG.historyFile)) { 
+    try { history = JSON.parse(fs.readFileSync(CONFIG.historyFile, 'utf8')); } catch (e) {} 
+  }
+  
+  const d = new Date(); 
+  const currentDay = d.getDay(); 
+  const diffToMonday = d.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
   const mondayDate = new Date(d.setDate(diffToMonday)).toISOString().split('T')[0];
   
   // Sanitización estricta de la entrada de hoy
@@ -242,14 +289,12 @@ async function main() {
   
   let entSem = entHoy;
   history.forEach(h => { 
-      if (h.fecha >= mondayDate && h.fecha !== today && h.canuelas && typeof h.canuelas.entrada !== 'undefined') {
-          entSem += parseInt(String(h.canuelas.entrada).replace(/\D/g, '')) || 0;
-      } 
+    if (h.fecha >= mondayDate && h.fecha !== today && h.canuelas && typeof h.canuelas.entrada !== 'undefined') {
+      entSem += parseInt(String(h.canuelas.entrada).replace(/\D/g, '')) || 0;
+    } 
   });
-  if (datos.canuelas) datos.canuelas.entradaSemanal = entSem; parseInt(String(h.canuelas.entrada).replace(/\D/g, '')) || 0;
-      } 
-  });
-  datos.canuelas.entradaSemanal = entSem;
+  
+  if (datos.canuelas) datos.canuelas.entradaSemanal = entSem;
 
   // GANADERO INDEX
   const pConsumo = datos.canuelas.novilloGordo.precio;
@@ -257,14 +302,19 @@ async function main() {
   const pExportacion = datos.apea.novMestizo.precio;
   datos.ganaderoIndex = parseFloat((((pConsumo / 4419) * 100 * 0.50) + ((pInvernada / 6373) * 100 * 0.30) + ((pExportacion / 8200) * 100 * 0.20)).toFixed(2));
 
-  const indices = history.map(h => h.ganaderoIndex).filter(v => v !== undefined && !isNaN(v)); indices.push(datos.ganaderoIndex);
+  const indices = history.map(h => h.ganaderoIndex).filter(v => v !== undefined && !isNaN(v)); 
+  indices.push(datos.ganaderoIndex);
   const sma7 = indices.slice(-7).reduce((a,b)=>a+b,0) / Math.min(7, indices.length) || datos.ganaderoIndex;
   const sma15 = indices.slice(-15).reduce((a,b)=>a+b,0) / Math.min(15, indices.length) || datos.ganaderoIndex;
-  let senal = 'MANTENER'; if (sma7 > sma15 * 1.01) senal = 'COMPRA'; else if (sma7 < sma15 * 0.99) senal = 'VENTA';
+  let senal = 'MANTENER'; 
+  if (sma7 > sma15 * 1.01) senal = 'COMPRA'; 
+  else if (sma7 < sma15 * 0.99) senal = 'VENTA';
   datos.senalMercado = { sma7: parseFloat(sma7.toFixed(2)), sma15: parseFloat(sma15.toFixed(2)), tendencia: senal };
 
   fs.writeFileSync(CONFIG.weightsFile, JSON.stringify(STATE.pesos, null, 2));
-  datos._lineage = STATE.lineage; datos._errores = STATE.errores; datos._confianza = calcConfianza();
+  datos._lineage = STATE.lineage; 
+  datos._errores = STATE.errores; 
+  datos._confianza = calcConfianza();
   fs.writeFileSync(CONFIG.latestFile, JSON.stringify(datos, null, 2));
   await sendTelegramAlert();
 
