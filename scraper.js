@@ -231,18 +231,22 @@ async function main() {
   datos.ceres.ternero = normObj(datos.ceres.ternero, 6373, 'Predio Ceres, SF', 'Infocampo / Tradición');
   datos.apea.novMestizo = normObj(datos.apea.novMestizo, 8200, 'Expo Bs As', 'APEA.org.ar');
 
-  // CÁLCULO DE ENTRADA SEMANAL BLINDADA (Acumulando enteros estrictos)
+ // CÁLCULO DE ENTRADA SEMANAL BLINDADA (Acumulando enteros estrictos)
   let history = []; if (fs.existsSync(CONFIG.historyFile)) { try { history = JSON.parse(fs.readFileSync(CONFIG.historyFile, 'utf8')); } catch (e) {} }
   const d = new Date(); const currentDay = d.getDay(); const diffToMonday = d.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
   const mondayDate = new Date(d.setDate(diffToMonday)).toISOString().split('T')[0];
   
-  const entHoy = parseInt(String(datos.canuelas?.entrada).replace(/\D/g, '')) || 0;
-  datos.canuelas.entrada = entHoy;
+  // Sanitización estricta de la entrada de hoy
+  const entHoy = parseInt(String(datos.canuelas?.entrada || 0).replace(/\D/g, '')) || 0;
+  if (datos.canuelas) datos.canuelas.entrada = entHoy;
   
   let entSem = entHoy;
   history.forEach(h => { 
-      if (h.fecha >= mondayDate && h.fecha !== today && h.canuelas?.entrada) {
+      if (h.fecha >= mondayDate && h.fecha !== today && h.canuelas && typeof h.canuelas.entrada !== 'undefined') {
           entSem += parseInt(String(h.canuelas.entrada).replace(/\D/g, '')) || 0;
+      } 
+  });
+  if (datos.canuelas) datos.canuelas.entradaSemanal = entSem; parseInt(String(h.canuelas.entrada).replace(/\D/g, '')) || 0;
       } 
   });
   datos.canuelas.entradaSemanal = entSem;
