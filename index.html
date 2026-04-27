@@ -52,6 +52,11 @@
         .chart-legend-color { width: 12px; height: 12px; border-radius: 3px; }
         .cat-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(116,185,255,0.15); color: var(--blue); margin-left: 8px; }
         .weight-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(162,155,254,0.15); color: var(--purple); margin-left: 4px; }
+        
+        /* NUEVO: Exportación dual Pie/Gancho */
+        .dual-price { display: flex; gap: 18px; text-align: right; }
+        .dual-price .col { display: flex; flex-direction: column; align-items: flex-end; }
+        .dual-price .col .lbl { font-size: 0.7em; color: #888; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
@@ -141,7 +146,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Vaca Gorda Consumo</span><span class="meta" id="m-mag-vaca">--</span></div><span class="value" id="mag-vaca">$--</span></div>
             </div>
 
-            <!-- BLOQUE ORIGINAL: Invernada y Exportación -->
+            <!-- BLOQUE MODIFICADO: Invernada y Exportación -->
             <div class="block">
                 <div class="block-header"><h2>🌾 INVERNADA Y EXPORTACIÓN</h2><span class="badge" style="background: var(--purple); color: #fff;">REFERENCIAS</span></div>
                 
@@ -149,8 +154,43 @@
                 <div class="data-row"><div class="data-col"><span class="label">Ternero 160-180 kg</span><span class="meta" id="m-inv-ter">--</span></div><span class="value v-green" id="inv-ter">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Novillito 200-250 kg</span><span class="meta" id="m-inv-nov">--</span></div><span class="value" id="inv-nov">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Vaquillona Invernada</span><span class="meta" id="m-inv-vaq">--</span></div><span class="value" id="inv-vaq">$--</span></div>
+                <div class="data-row"><div class="data-col"><span class="label">Vaquillona 180–200 kg</span><span class="meta" id="m-inv-vaq-180">--</span></div><span class="value" id="inv-vaq-180">$--</span></div>
+                <div class="data-row"><div class="data-col"><span class="label">Vaquillona 220–250 kg</span><span class="meta" id="m-inv-vaq-220">--</span></div><span class="value" id="inv-vaq-220">$--</span></div>
                 
                 <div class="subsection-title" style="margin-top: 25px;">Sector Exportación (FOB / Industria)</div>
+                
+                <div class="data-row" style="align-items:flex-start;">
+                    <div class="data-col"><span class="label">Novillo Exportación</span><span class="meta" id="m-exp-nov-std">--</span></div>
+                    <div class="dual-price">
+                        <div class="col"><span class="lbl">Pie</span><span class="value v-gold" id="exp-nov-std-pie">$--</span></div>
+                        <div class="col"><span class="lbl">Gancho</span><span class="value" id="exp-nov-std-gancho">$--</span></div>
+                    </div>
+                </div>
+                
+                <div class="data-row" style="align-items:flex-start;">
+                    <div class="data-col"><span class="label">Vaca Gorda</span><span class="meta" id="m-exp-vaca-gorda">--</span></div>
+                    <div class="dual-price">
+                        <div class="col"><span class="lbl">Pie</span><span class="value v-gold" id="exp-vaca-gorda-pie">$--</span></div>
+                        <div class="col"><span class="lbl">Gancho</span><span class="value" id="exp-vaca-gorda-gancho">$--</span></div>
+                    </div>
+                </div>
+                
+                <div class="data-row" style="align-items:flex-start;">
+                    <div class="data-col"><span class="label">Vaca Manufactura</span><span class="meta" id="m-exp-vaca-manuf">--</span></div>
+                    <div class="dual-price">
+                        <div class="col"><span class="lbl">Pie</span><span class="value v-gold" id="exp-vaca-manuf-pie">$--</span></div>
+                        <div class="col"><span class="lbl">Gancho</span><span class="value" id="exp-vaca-manuf-gancho">$--</span></div>
+                    </div>
+                </div>
+                
+                <div class="data-row" style="align-items:flex-start;">
+                    <div class="data-col"><span class="label">Vaca Conserva</span><span class="meta" id="m-exp-vaca-cons">--</span></div>
+                    <div class="dual-price">
+                        <div class="col"><span class="lbl">Pie</span><span class="value v-gold" id="exp-vaca-cons-pie">$--</span></div>
+                        <div class="col"><span class="lbl">Gancho</span><span class="value" id="exp-vaca-cons-gancho">$--</span></div>
+                    </div>
+                </div>
+                
                 <div class="data-row"><div class="data-col"><span class="label">Novillo Mestizo Expo</span><span class="meta" id="m-exp-nov">--</span></div><span class="value v-gold" id="exp-nov">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Vaca Conserva/Manuf.</span><span class="meta" id="m-exp-vaca">--</span></div><span class="value" id="exp-vaca">$--</span></div>
                 <div class="data-row"><div class="data-col"><span class="label">Cuota Hilton (Valor FOB)</span><span class="meta" id="m-exp-hil">--</span></div><span class="value" id="exp-hil">u$s --</span></div>
@@ -196,23 +236,22 @@
     const FEMP = {
         config: { url: './data/latest.json' },
         rawData: null,
-        priceType: 'pie', // 'pie' o 'gancho'
+        priceType: 'pie',
         catColors: ['#ffd700', '#00ff88', '#74b9ff', '#ff4757', '#a29bfe', '#fd79a8', '#ffeaa7', '#dfe6e9'],
         
-        // Mapeo de categorías para compatibilidad con datos antiguos y nuevos
         categoryMap: {
             consumo: {
                 novillo: { sources: ['canuelas.novilloGordo', 'canuelas.novillo431'], label: 'Novillo Consumo' },
                 vaca: { sources: ['canuelas.vacaGorda'], label: 'Vaca Consumo' }
             },
             exportacion: {
-                novillo: { sources: ['apea.novMestizo'], label: 'Novillo Expo' },
-                vaca: { sources: ['apea.vacaConserva'], label: 'Vaca Expo' }
+                novillo: { sources: ['apea.novMestizo', 'apea.novilloExportacion'], label: 'Novillo Expo' },
+                vaca: { sources: ['apea.vacaConserva', 'apea.vacaManufactura', 'apea.vacaGorda'], label: 'Vaca Expo' }
             },
             invernada: {
                 ternero: { sources: ['ceres.ternero'], label: 'Ternero', hasWeight: true },
                 novillito: { sources: ['ceres.novillito'], label: 'Novillito', hasWeight: true },
-                vaquillona: { sources: ['ceres.vaquillona'], label: 'Vaquillona', hasWeight: true }
+                vaquillona: { sources: ['ceres.vaquillona', 'ceres.vaquillona180', 'ceres.vaquillona220'], label: 'Vaquillona', hasWeight: true }
             }
         },
 
@@ -235,11 +274,10 @@
                 return; 
             }
             
-            // Aplicar factor pie/gancho si existe en el objeto
             let precio = obj.precio;
             const tipoPrecio = obj.price_type || 'pie';
             if (this.priceType === 'gancho' && tipoPrecio === 'pie') {
-                precio = precio * 0.58; // Factor estándar pie->gancho ~58%
+                precio = precio * 0.58;
             } else if (this.priceType === 'pie' && tipoPrecio === 'gancho') {
                 precio = precio / 0.58;
             }
@@ -257,16 +295,41 @@
             }
         },
 
-        // NUEVO: Construir modelo unificado de categorías desde datos planos o estructurados
+        // NUEVO: Renderiza fila de exportación con Pie + Gancho
+        setExportVal(idBase, obj) {
+            const pieEl   = document.getElementById(idBase + '-pie');
+            const ganEl   = document.getElementById(idBase + '-gancho');
+            const metaEl  = document.getElementById('m-' + idBase);
+            
+            if (!obj || (obj.pie === undefined && obj.gancho === undefined && obj.precio === undefined)) {
+                if (pieEl)  pieEl.textContent  = '--';
+                if (ganEl)  ganEl.textContent  = '--';
+                if (metaEl) metaEl.textContent = 'Procesando origen de datos...';
+                return;
+            }
+            
+            const pie   = obj.pie !== undefined ? obj.pie : (obj.price_type === 'pie' ? obj.precio : undefined);
+            const gancho = obj.gancho !== undefined ? obj.gancho : (obj.price_type === 'gancho' ? obj.precio : undefined);
+            
+            if (pieEl)   pieEl.textContent  = pie   !== undefined ? '$' + this.fmt(Math.round(pie)) : '--';
+            if (ganEl)   ganEl.textContent  = gancho !== undefined ? '$' + this.fmt(Math.round(gancho)) : '--';
+            
+            if (metaEl) {
+                const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
+                const h = obj.hora || '--';
+                const fte = obj.fuente || '--';
+                const lug = obj.lugar || '--';
+                metaEl.innerHTML = `📝 ${fte}<br>📍 ${lug} | 🗓️ ${f} ⏰ ${h}`;
+            }
+        },
+
         buildCategoryModel(d) {
             const model = { consumo: {}, exportacion: {}, invernada: {} };
             
-            // Si ya viene estructurado en formato nuevo
             if (d.categorias) {
                 return d.categorias;
             }
             
-            // Compatibilidad: mapear desde estructura plana antigua
             const flat = {
                 'canuelas.novilloGordo': d.canuelas?.novilloGordo,
                 'canuelas.novillo431': d.canuelas?.novillo431,
@@ -276,8 +339,13 @@
                 'ceres.ternero': d.ceres?.ternero,
                 'ceres.novillito': d.ceres?.novillito,
                 'ceres.vaquillona': d.ceres?.vaquillona,
+                'ceres.vaquillona180': d.ceres?.vaquillona180,
+                'ceres.vaquillona220': d.ceres?.vaquillona220,
                 'apea.novMestizo': d.apea?.novMestizo,
                 'apea.vacaConserva': d.apea?.vacaConserva,
+                'apea.vacaGorda': d.apea?.vacaGorda,
+                'apea.vacaManufactura': d.apea?.vacaManufactura,
+                'apea.novilloExportacion': d.apea?.novilloExportacion,
                 'apea.hilton': d.apea?.hilton
             };
             
@@ -289,11 +357,12 @@
                     cfg.sources.forEach(src => {
                         const obj = flat[src];
                         if (obj && obj.precio !== undefined) {
-                            // Si es invernada y no tiene weight_range, inferir del nombre
                             if (cfg.hasWeight && !obj.weight_range) {
                                 if (src.includes('ternero')) obj.weight_range = '160-180';
                                 if (src.includes('novillito')) obj.weight_range = '200-250';
-                                if (src.includes('vaquillona')) obj.weight_range = '270-390';
+                                if (src.includes('vaquillona180')) obj.weight_range = '180-200';
+                                if (src.includes('vaquillona220')) obj.weight_range = '220-250';
+                                if (src.includes('vaquillona') && !src.includes('180') && !src.includes('220')) obj.weight_range = '270-390';
                             }
                             if (!obj.price_type) obj.price_type = 'pie';
                             items.push(obj);
@@ -309,7 +378,7 @@
                                 model[sistema][cat][wr].push(it);
                             });
                         } else {
-                            model[sistema][cat] = items[0]; // Tomar el primero para categorías simples
+                            model[sistema][cat] = items[0];
                         }
                     }
                 });
@@ -318,7 +387,6 @@
             return model;
         },
 
-        // NUEVO: Obtener datos filtrados para el gráfico
         getChartData(categorias) {
             const data = [];
             const sistema = document.getElementById('filter-sistema').value;
@@ -334,7 +402,6 @@
                     const item = categorias[sys][cat];
                     if (!item) return;
                     
-                    // Invernada con rangos de peso
                     if (typeof item === 'object' && !item.precio) {
                         Object.keys(item).forEach(wr => {
                             if (peso !== 'all' && peso !== wr) return;
@@ -367,7 +434,6 @@
             return data;
         },
 
-        // NUEVO: Renderizar gráfico de barras con Canvas
         drawChart(data) {
             const canvas = document.getElementById('catChart');
             const ctx = canvas.getContext('2d');
@@ -400,7 +466,6 @@
             const barWidth = Math.min(60, (chartW / data.length) * 0.6);
             const gap = (chartW - (barWidth * data.length)) / (data.length + 1);
             
-            // Ejes
             ctx.strokeStyle = 'rgba(255,255,255,0.1)';
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -409,7 +474,6 @@
             ctx.lineTo(w - padding.right, h - padding.bottom);
             ctx.stroke();
             
-            // Líneas horizontales
             for (let i = 0; i <= 5; i++) {
                 const y = padding.top + chartH - (chartH * (i/5));
                 ctx.strokeStyle = 'rgba(255,255,255,0.05)';
@@ -424,13 +488,11 @@
                 ctx.fillText(this.fmt(Math.round(maxVal * (i/5))), padding.left - 8, y + 4);
             }
             
-            // Barras
             data.forEach((d, i) => {
                 const x = padding.left + gap + i * (barWidth + gap);
                 const barH = (d.value / maxVal) * chartH;
                 const y = padding.top + chartH - barH;
                 
-                // Gradiente
                 const grad = ctx.createLinearGradient(0, y, 0, y + barH);
                 grad.addColorStop(0, d.color);
                 grad.addColorStop(1, d.color + '44');
@@ -440,13 +502,11 @@
                 ctx.roundRect(x, y, barWidth, barH, [4, 4, 0, 0]);
                 ctx.fill();
                 
-                // Valor encima
                 ctx.fillStyle = '#fff';
                 ctx.font = 'bold 12px Segoe UI';
                 ctx.textAlign = 'center';
                 ctx.fillText('$' + this.fmt(d.value), x + barWidth/2, y - 8);
                 
-                // Label abajo
                 ctx.save();
                 ctx.translate(x + barWidth/2, h - padding.bottom + 15);
                 ctx.rotate(-Math.PI / 6);
@@ -457,7 +517,6 @@
                 ctx.restore();
             });
             
-            // Leyenda HTML
             const legend = document.getElementById('chartLegend');
             legend.innerHTML = data.map(d => `
                 <div class="chart-legend-item">
@@ -467,7 +526,6 @@
             `).join('');
         },
 
-        // NUEVO: Actualizar opciones de categoría según sistema
         updateCategoriaOptions() {
             const sistema = document.getElementById('filter-sistema').value;
             const select = document.getElementById('filter-categoria');
@@ -486,8 +544,6 @@
                 select.appendChild(opt);
             });
             
-            // Habilitar/deshabilitar filtro de peso
-            const isInvernada = sistema === 'invernada' || (sistema === 'all' && select.value === 'ternero');
             pesoGroup.style.opacity = (sistema === 'invernada') ? '1' : '0.4';
             pesoGroup.style.pointerEvents = (sistema === 'invernada') ? 'auto' : 'none';
         },
@@ -548,7 +604,6 @@
                 else { sEl.style.background = 'rgba(255,215,0,0.2)'; sEl.style.color = 'var(--yellow)'; sEl.style.border = '1px solid var(--yellow)'; }
             }
 
-            // Entradas Cañuelas BLINDADAS
             const entHoy = parseInt(d.canuelas?.entrada) || 0;
             const entSem = parseInt(d.canuelas?.entradaSemanal) || 0;
             document.getElementById('mag-hoy').textContent = this.fmt(entHoy);
@@ -558,7 +613,7 @@
             const ch = d.canuelas?.hora || '--';
             document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Último Parte: ${cf} ⏰ ${ch}`;
 
-            // Precios (compatibilidad absoluta con estructura anterior)
+            // Precios originales (compatibilidad absoluta)
             this.setVal('mag-nov', 'm-mag-nov', d.canuelas?.novilloGordo);
             this.setVal('mag-n431', 'm-mag-n431', d.canuelas?.novillo431);
             this.setVal('mag-nt300', 'm-mag-nt300', d.canuelas?.novillito300);
@@ -579,7 +634,17 @@
             this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
             this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
 
-            // CÁLCULOS MACRO (Garantía Anti-NaN)
+            // NUEVO: Invernada extendida
+            this.setVal('inv-vaq-180', 'm-inv-vaq-180', d.ceres?.vaquillona180);
+            this.setVal('inv-vaq-220', 'm-inv-vaq-220', d.ceres?.vaquillona220);
+
+            // NUEVO: Exportación extendida (Pie + Gancho)
+            this.setExportVal('exp-nov-std',   d.apea?.novilloExportacion || d.apea?.novMestizo);
+            this.setExportVal('exp-vaca-gorda', d.apea?.vacaGorda);
+            this.setExportVal('exp-vaca-manuf', d.apea?.vacaManufactura);
+            this.setExportVal('exp-vaca-cons',  d.apea?.vacaConserva);
+
+            // CÁLCULOS MACRO
             const ext = (obj) => parseFloat(obj?.precio || 0);
             
             const ter = ext(d.ceres?.ternero) || 6373;
@@ -599,7 +664,7 @@
             document.getElementById('mac-brecha').innerHTML = this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true);
             document.getElementById('rel-usd').textContent = 'u$s ' + (ter / dbl).toFixed(2);
 
-            // NUEVO: Renderizar modelo de categorías y gráfico
+            // Gráfico
             const categorias = this.buildCategoryModel(d);
             const chartData = this.getChartData(categorias);
             this.drawChart(chartData);
