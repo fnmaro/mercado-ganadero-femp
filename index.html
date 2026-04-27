@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.4</title>
+    <title>🐄 MERCADO GANADERO FEMP | Dashboard Crítico V4.5</title>
     <style>
         :root { --bg: #0f0f1a; --bg-card: rgba(20,20,40,0.85); --border: rgba(255,255,255,0.08); --text: #e0e0e0; --text-dim: #888; --gold: #ffd700; --green: #00ff88; --red: #ff4757; --yellow: #ffd700; --blue: #74b9ff; --purple: #a29bfe; --font: 'Segoe UI', system-ui, sans-serif; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,12 +32,32 @@
         .alert-banner { background: rgba(255,71,87,0.15); border: 1px solid var(--red); color: var(--red); padding: 12px; border-radius: 8px; margin: 15px 0; display: none; gap: 10px; align-items: center; } .alert-banner.show { display: flex; } .alert-banner.warn { background: rgba(255,215,0,0.15); border-color: var(--yellow); color: var(--yellow); }
         .highlight-box { background: rgba(0,255,136,0.1); border-left: 4px solid var(--green); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; }
         .subsection-title { color: var(--text-dim); font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin: 15px 0 5px 0; }
+        
+        /* NUEVO: Filtros y controles */
+        .control-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 15px 20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        .control-group label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .control-group select, .control-group button { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-family: var(--font); font-size: 0.9em; cursor: pointer; min-width: 140px; }
+        .control-group select:focus { outline: none; border-color: var(--gold); }
+        .control-group button { background: linear-gradient(135deg, var(--gold), #b8860b); color: #000; font-weight: 700; border: none; }
+        .control-group button:hover { opacity: 0.9; }
+        .toggle-group { display: flex; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
+        .toggle-group button { flex: 1; background: transparent; border: none; color: var(--text-dim); padding: 8px 16px; cursor: pointer; font-size: 0.85em; font-weight: 600; }
+        .toggle-group button.active { background: rgba(255,215,0,0.2); color: var(--gold); }
+        
+        /* NUEVO: Gráfico */
+        .chart-container { position: relative; height: 320px; width: 100%; margin-top: 15px; }
+        .chart-legend { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 10px; font-size: 0.8em; }
+        .chart-legend-item { display: flex; align-items: center; gap: 6px; }
+        .chart-legend-color { width: 12px; height: 12px; border-radius: 3px; }
+        .cat-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(116,185,255,0.15); color: var(--blue); margin-left: 8px; }
+        .weight-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(162,155,254,0.15); color: var(--purple); margin-left: 4px; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🐄 Mercado Ganadero en Tiempo Real</h1>
-        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.4</div>
+        <div class="subtitle">FRAMEWORK DE EXIGENCIA MÁXIMA PRÁCTICA — V4.5</div>
         <div class="datetime" id="dt">Inicializando motor...</div>
     </div>
     
@@ -63,7 +83,48 @@
             </div>
         </div>
 
+        <!-- NUEVO: Panel de Filtros -->
+        <div class="control-panel">
+            <div class="control-group">
+                <label>Sistema</label>
+                <select id="filter-sistema">
+                    <option value="all">Todos</option>
+                    <option value="consumo">Consumo</option>
+                    <option value="exportacion">Exportación</option>
+                    <option value="invernada">Invernada</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Categoría</label>
+                <select id="filter-categoria">
+                    <option value="all">Todas</option>
+                </select>
+            </div>
+            <div class="control-group" id="group-peso" style="opacity: 0.4; pointer-events: none;">
+                <label>Rango de Peso</label>
+                <select id="filter-peso">
+                    <option value="all">Todos</option>
+                    <option value="160-180">160–180 kg</option>
+                    <option value="180-200">180–200 kg</option>
+                    <option value="200-220">200–220 kg</option>
+                    <option value="220-250">220–250 kg</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Tipo de Precio</label>
+                <div class="toggle-group">
+                    <button class="active" data-type="pie" onclick="FEMP.setPriceType('pie')">Pie</button>
+                    <button data-type="gancho" onclick="FEMP.setPriceType('gancho')">Gancho</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Acción</label>
+                <button onclick="FEMP.applyFilters()">Aplicar Filtros</button>
+            </div>
+        </div>
+
         <div class="grid">
+            <!-- BLOQUE ORIGINAL: Mercado de Cañuelas -->
             <div class="block">
                 <div class="block-header"><h2>🏛️ MERCADO DE CAÑUELAS</h2><span class="badge" style="background: #333; color: #fff;">MAG</span></div>
                 <div class="highlight-box">
@@ -80,6 +141,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Vaca Gorda Consumo</span><span class="meta" id="m-mag-vaca">--</span></div><span class="value" id="mag-vaca">$--</span></div>
             </div>
 
+            <!-- BLOQUE ORIGINAL: Invernada y Exportación -->
             <div class="block">
                 <div class="block-header"><h2>🌾 INVERNADA Y EXPORTACIÓN</h2><span class="badge" style="background: var(--purple); color: #fff;">REFERENCIAS</span></div>
                 
@@ -94,6 +156,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Cuota Hilton (Valor FOB)</span><span class="meta" id="m-exp-hil">--</span></div><span class="value" id="exp-hil">u$s --</span></div>
             </div>
 
+            <!-- BLOQUE ORIGINAL: Macroeconomía -->
             <div class="block">
                 <div class="block-header"><h2>💱 MACROECONOMÍA AGRO</h2></div>
                 <div class="data-row"><div class="data-col"><span class="label">Dólar Oficial (BNA)</span><span class="meta" id="m-mac-dof">--</span></div><span class="value" id="mac-dof">$--</span></div>
@@ -103,6 +166,19 @@
                 <div class="data-row"><div class="data-col"><span class="label">Soja Pizarra (Rosario)</span><span class="meta" id="m-mac-soja">--</span></div><span class="value v-green" id="mac-soja">$--</span></div>
             </div>
 
+            <!-- NUEVO: Gráfico por Categoría -->
+            <div class="block full-width">
+                <div class="block-header">
+                    <h2>📊 VISUALIZACIÓN POR CATEGORÍA</h2>
+                    <span class="badge" style="background: var(--blue); color: #000;">ANÁLISIS</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="catChart"></canvas>
+                </div>
+                <div class="chart-legend" id="chartLegend"></div>
+            </div>
+
+            <!-- BLOQUE ORIGINAL: Indicadores Técnicos -->
             <div class="block full-width" style="border-top: 3px solid var(--gold);">
                 <div class="block-header"><h2>⚖️ INDICADORES TÉCNICOS Y RELACIONES CLAVE</h2></div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
@@ -119,7 +195,27 @@
     <script>
     const FEMP = {
         config: { url: './data/latest.json' },
+        rawData: null,
+        priceType: 'pie', // 'pie' o 'gancho'
+        catColors: ['#ffd700', '#00ff88', '#74b9ff', '#ff4757', '#a29bfe', '#fd79a8', '#ffeaa7', '#dfe6e9'],
         
+        // Mapeo de categorías para compatibilidad con datos antiguos y nuevos
+        categoryMap: {
+            consumo: {
+                novillo: { sources: ['canuelas.novilloGordo', 'canuelas.novillo431'], label: 'Novillo Consumo' },
+                vaca: { sources: ['canuelas.vacaGorda'], label: 'Vaca Consumo' }
+            },
+            exportacion: {
+                novillo: { sources: ['apea.novMestizo'], label: 'Novillo Expo' },
+                vaca: { sources: ['apea.vacaConserva'], label: 'Vaca Expo' }
+            },
+            invernada: {
+                ternero: { sources: ['ceres.ternero'], label: 'Ternero', hasWeight: true },
+                novillito: { sources: ['ceres.novillito'], label: 'Novillito', hasWeight: true },
+                vaquillona: { sources: ['ceres.vaquillona'], label: 'Vaquillona', hasWeight: true }
+            }
+        },
+
         fmt(v) { 
             const n = Number(v); return (!isNaN(n) && v !== null && v !== undefined) ? n.toLocaleString('es-AR') : '--'; 
         },
@@ -132,7 +228,6 @@
             return `<span class="badge" style="background:rgba(255,71,87,0.15);color:var(--red);border:1px solid var(--red)">🔴 ${vStr}</span>`;
         },
 
-        // INYECCIÓN BLINDADA ABSOLUTA
         setVal(vId, mId, obj, prefix = '$', suffix = '') {
             if (!obj || obj.precio === undefined) { 
                 document.getElementById(vId).textContent = '--'; 
@@ -140,20 +235,282 @@
                 return; 
             }
             
-            document.getElementById(vId).textContent = `${prefix}${this.fmt(obj.precio)}${suffix}`;
+            // Aplicar factor pie/gancho si existe en el objeto
+            let precio = obj.precio;
+            const tipoPrecio = obj.price_type || 'pie';
+            if (this.priceType === 'gancho' && tipoPrecio === 'pie') {
+                precio = precio * 0.58; // Factor estándar pie->gancho ~58%
+            } else if (this.priceType === 'pie' && tipoPrecio === 'gancho') {
+                precio = precio / 0.58;
+            }
+            
+            document.getElementById(vId).textContent = `${prefix}${this.fmt(Math.round(precio))}${suffix}`;
             
             if(mId) {
                 const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
                 const h = obj.hora || '--';
                 const fte = obj.fuente || '--';
                 const lug = obj.lugar || '--';
-                // Formato exacto exigido: Fuente | Lugar | Fecha Hora
-                document.getElementById(mId).innerHTML = `📝 ${fte} <br> 📍 ${lug} | 🗓️ ${f} ⏰ ${h}`;
+                const w = obj.weight_range ? `<span class="weight-tag">${obj.weight_range} kg</span>` : '';
+                const pt = obj.price_type ? `<span class="cat-tag">${obj.price_type.toUpperCase()}</span>` : '';
+                document.getElementById(mId).innerHTML = `📝 ${fte} ${pt}<br> 📍 ${lug} ${w}| 🗓️ ${f} ⏰ ${h}`;
             }
         },
 
+        // NUEVO: Construir modelo unificado de categorías desde datos planos o estructurados
+        buildCategoryModel(d) {
+            const model = { consumo: {}, exportacion: {}, invernada: {} };
+            
+            // Si ya viene estructurado en formato nuevo
+            if (d.categorias) {
+                return d.categorias;
+            }
+            
+            // Compatibilidad: mapear desde estructura plana antigua
+            const flat = {
+                'canuelas.novilloGordo': d.canuelas?.novilloGordo,
+                'canuelas.novillo431': d.canuelas?.novillo431,
+                'canuelas.vacaGorda': d.canuelas?.vacaGorda,
+                'canuelas.novillito300': d.canuelas?.novillito300,
+                'canuelas.vaquillona270': d.canuelas?.vaquillona270,
+                'ceres.ternero': d.ceres?.ternero,
+                'ceres.novillito': d.ceres?.novillito,
+                'ceres.vaquillona': d.ceres?.vaquillona,
+                'apea.novMestizo': d.apea?.novMestizo,
+                'apea.vacaConserva': d.apea?.vacaConserva,
+                'apea.hilton': d.apea?.hilton
+            };
+            
+            Object.keys(this.categoryMap).forEach(sistema => {
+                Object.keys(this.categoryMap[sistema]).forEach(cat => {
+                    const cfg = this.categoryMap[sistema][cat];
+                    const items = [];
+                    
+                    cfg.sources.forEach(src => {
+                        const obj = flat[src];
+                        if (obj && obj.precio !== undefined) {
+                            // Si es invernada y no tiene weight_range, inferir del nombre
+                            if (cfg.hasWeight && !obj.weight_range) {
+                                if (src.includes('ternero')) obj.weight_range = '160-180';
+                                if (src.includes('novillito')) obj.weight_range = '200-250';
+                                if (src.includes('vaquillona')) obj.weight_range = '270-390';
+                            }
+                            if (!obj.price_type) obj.price_type = 'pie';
+                            items.push(obj);
+                        }
+                    });
+                    
+                    if (items.length > 0) {
+                        if (cfg.hasWeight) {
+                            model[sistema][cat] = {};
+                            items.forEach(it => {
+                                const wr = it.weight_range || 'general';
+                                if (!model[sistema][cat][wr]) model[sistema][cat][wr] = [];
+                                model[sistema][cat][wr].push(it);
+                            });
+                        } else {
+                            model[sistema][cat] = items[0]; // Tomar el primero para categorías simples
+                        }
+                    }
+                });
+            });
+            
+            return model;
+        },
+
+        // NUEVO: Obtener datos filtrados para el gráfico
+        getChartData(categorias) {
+            const data = [];
+            const sistema = document.getElementById('filter-sistema').value;
+            const categoria = document.getElementById('filter-categoria').value;
+            const peso = document.getElementById('filter-peso').value;
+            
+            Object.keys(categorias).forEach(sys => {
+                if (sistema !== 'all' && sistema !== sys) return;
+                
+                Object.keys(categorias[sys]).forEach(cat => {
+                    if (categoria !== 'all' && categoria !== cat) return;
+                    
+                    const item = categorias[sys][cat];
+                    if (!item) return;
+                    
+                    // Invernada con rangos de peso
+                    if (typeof item === 'object' && !item.precio) {
+                        Object.keys(item).forEach(wr => {
+                            if (peso !== 'all' && peso !== wr) return;
+                            const arr = item[wr];
+                            const latest = Array.isArray(arr) ? arr[arr.length - 1] : arr;
+                            if (latest && latest.precio) {
+                                let precio = latest.precio;
+                                if (this.priceType === 'gancho' && (latest.price_type || 'pie') === 'pie') precio = precio * 0.58;
+                                data.push({
+                                    label: `${this.categoryMap[sys][cat].label} ${wr}`,
+                                    value: Math.round(precio),
+                                    sistema: sys,
+                                    color: this.catColors[data.length % this.catColors.length]
+                                });
+                            }
+                        });
+                    } else if (item.precio) {
+                        let precio = item.precio;
+                        if (this.priceType === 'gancho' && (item.price_type || 'pie') === 'pie') precio = precio * 0.58;
+                        data.push({
+                            label: this.categoryMap[sys][cat].label,
+                            value: Math.round(precio),
+                            sistema: sys,
+                            color: this.catColors[data.length % this.catColors.length]
+                        });
+                    }
+                });
+            });
+            
+            return data;
+        },
+
+        // NUEVO: Renderizar gráfico de barras con Canvas
+        drawChart(data) {
+            const canvas = document.getElementById('catChart');
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            
+            canvas.width = rect.width * dpr;
+            canvas.height = 320 * dpr;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = '320px';
+            ctx.scale(dpr, dpr);
+            
+            const w = rect.width;
+            const h = 320;
+            const padding = { top: 30, right: 20, bottom: 60, left: 60 };
+            const chartW = w - padding.left - padding.right;
+            const chartH = h - padding.top - padding.bottom;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            if (data.length === 0) {
+                ctx.fillStyle = '#888';
+                ctx.font = '14px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.fillText('No hay datos para los filtros seleccionados', w/2, h/2);
+                return;
+            }
+            
+            const maxVal = Math.max(...data.map(d => d.value)) * 1.1;
+            const barWidth = Math.min(60, (chartW / data.length) * 0.6);
+            const gap = (chartW - (barWidth * data.length)) / (data.length + 1);
+            
+            // Ejes
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, padding.top);
+            ctx.lineTo(padding.left, h - padding.bottom);
+            ctx.lineTo(w - padding.right, h - padding.bottom);
+            ctx.stroke();
+            
+            // Líneas horizontales
+            for (let i = 0; i <= 5; i++) {
+                const y = padding.top + chartH - (chartH * (i/5));
+                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(w - padding.right, y);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#888';
+                ctx.font = '11px Segoe UI';
+                ctx.textAlign = 'right';
+                ctx.fillText(this.fmt(Math.round(maxVal * (i/5))), padding.left - 8, y + 4);
+            }
+            
+            // Barras
+            data.forEach((d, i) => {
+                const x = padding.left + gap + i * (barWidth + gap);
+                const barH = (d.value / maxVal) * chartH;
+                const y = padding.top + chartH - barH;
+                
+                // Gradiente
+                const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+                grad.addColorStop(0, d.color);
+                grad.addColorStop(1, d.color + '44');
+                
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect(x, y, barWidth, barH, [4, 4, 0, 0]);
+                ctx.fill();
+                
+                // Valor encima
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 12px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.fillText('$' + this.fmt(d.value), x + barWidth/2, y - 8);
+                
+                // Label abajo
+                ctx.save();
+                ctx.translate(x + barWidth/2, h - padding.bottom + 15);
+                ctx.rotate(-Math.PI / 6);
+                ctx.fillStyle = '#aaa';
+                ctx.font = '11px Segoe UI';
+                ctx.textAlign = 'right';
+                ctx.fillText(d.label, 0, 0);
+                ctx.restore();
+            });
+            
+            // Leyenda HTML
+            const legend = document.getElementById('chartLegend');
+            legend.innerHTML = data.map(d => `
+                <div class="chart-legend-item">
+                    <div class="chart-legend-color" style="background:${d.color}"></div>
+                    <span>${d.label} <strong>$${this.fmt(d.value)}</strong></span>
+                </div>
+            `).join('');
+        },
+
+        // NUEVO: Actualizar opciones de categoría según sistema
+        updateCategoriaOptions() {
+            const sistema = document.getElementById('filter-sistema').value;
+            const select = document.getElementById('filter-categoria');
+            const pesoGroup = document.getElementById('group-peso');
+            
+            select.innerHTML = '<option value="all">Todas</option>';
+            
+            const cats = sistema === 'all' 
+                ? [...new Set([...Object.keys(this.categoryMap.consumo), ...Object.keys(this.categoryMap.exportacion), ...Object.keys(this.categoryMap.invernada)])]
+                : Object.keys(this.categoryMap[sistema] || {});
+                
+            cats.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c.charAt(0).toUpperCase() + c.slice(1);
+                select.appendChild(opt);
+            });
+            
+            // Habilitar/deshabilitar filtro de peso
+            const isInvernada = sistema === 'invernada' || (sistema === 'all' && select.value === 'ternero');
+            pesoGroup.style.opacity = (sistema === 'invernada') ? '1' : '0.4';
+            pesoGroup.style.pointerEvents = (sistema === 'invernada') ? 'auto' : 'none';
+        },
+
+        setPriceType(type) {
+            this.priceType = type;
+            document.querySelectorAll('.toggle-group button').forEach(b => {
+                b.classList.toggle('active', b.dataset.type === type);
+            });
+            if (this.rawData) this.render(this.rawData);
+        },
+
+        applyFilters() {
+            if (this.rawData) this.render(this.rawData);
+        },
+
         init() {
-            setInterval(() => { document.getElementById('dt').textContent = new Date().toLocaleString('es-AR', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' }); }, 1000);
+            setInterval(() => { 
+                document.getElementById('dt').textContent = new Date().toLocaleString('es-AR', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' }); 
+            }, 1000);
+            
+            document.getElementById('filter-sistema').addEventListener('change', () => this.updateCategoriaOptions());
+            this.updateCategoriaOptions();
             this.load();
         },
 
@@ -161,6 +518,7 @@
             try {
                 const res = await fetch(this.config.url + '?t=' + Date.now());
                 const d = await res.json();
+                this.rawData = d;
                 this.render(d);
             } catch (e) {
                 document.getElementById('alertBox').className = 'alert-banner show';
@@ -169,11 +527,15 @@
         },
 
         render(d) {
+            this.rawData = d;
             document.getElementById('fMode').innerHTML = `<span class="badge ${d._modo === 'AUTO' ? 'badge-auto' : 'badge-cache'}">${d._modo}</span>`;
             document.getElementById('fSync').textContent = new Date(d._syncTime).toLocaleString('es-AR');
             document.getElementById('fConf').innerHTML = `<span class="sem ${d._confianza >= 80 ? 'sem-g' : 'sem-y'}"></span> ${d._confianza}%`;
             document.getElementById('fMerc').innerHTML = d.diaMercado ? '<span class="v-green">ABIERTO</span>' : '<span class="v-red">CERRADO</span>';
-            if (!d.diaMercado) { document.getElementById('alertBox').className = 'alert-banner show warn'; document.getElementById('alertMsg').textContent = d._nota || 'Mercado cerrado hoy. Mostrando últimos valores de cotización hábiles.'; }
+            if (!d.diaMercado) { 
+                document.getElementById('alertBox').className = 'alert-banner show warn'; 
+                document.getElementById('alertMsg').textContent = d._nota || 'Mercado cerrado hoy. Mostrando últimos valores de cotización hábiles.'; 
+            }
 
             if (d.ganaderoIndex) {
                 document.getElementById('idx-val').textContent = d.ganaderoIndex;
@@ -192,21 +554,17 @@
             document.getElementById('mag-hoy').textContent = this.fmt(entHoy);
             document.getElementById('mag-sem').textContent = this.fmt(entSem);
             
-            // Garantizamos que siempre muestre fecha y hora del último escaneo
-            const rawFecha = d.canuelas?.fecha || new Date().toISOString().split('T')[0];
-            const cf = rawFecha.includes('-') ? rawFecha.split('-').reverse().join('/') : rawFecha;
-            const ch = d.canuelas?.hora || new Date().toLocaleTimeString('es-AR', {hour12: false}).substring(0,5);
-            
-            document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Actualizado: ${cf} ⏰ ${ch}`;
+            const cf = d.canuelas?.fecha ? d.canuelas.fecha.split('-').reverse().join('/') : '--';
+            const ch = d.canuelas?.hora || '--';
+            document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Último Parte: ${cf} ⏰ ${ch}`;
 
-            // Precios
+            // Precios (compatibilidad absoluta con estructura anterior)
             this.setVal('mag-nov', 'm-mag-nov', d.canuelas?.novilloGordo);
             this.setVal('mag-n431', 'm-mag-n431', d.canuelas?.novillo431);
             this.setVal('mag-nt300', 'm-mag-nt300', d.canuelas?.novillito300);
             this.setVal('mag-vaq', 'm-mag-vaq', d.canuelas?.vaquillona270);
             this.setVal('mag-vaca', 'm-mag-vaca', d.canuelas?.vacaGorda);
 
-            // Invernada/Expo Ampliada
             this.setVal('inv-ter', 'm-inv-ter', d.ceres?.ternero);
             this.setVal('inv-nov', 'm-inv-nov', d.ceres?.novillito);
             this.setVal('inv-vaq', 'm-inv-vaq', d.ceres?.vaquillona);
@@ -235,12 +593,16 @@
             const valMn = parseFloat((novG / mK).toFixed(1));
             const valBrecha = parseFloat((((dbl - dof) / dof) * 100).toFixed(1));
 
-            // Renderizado de Semáforos
             document.getElementById('rel-tn').innerHTML = this.getSemaphore(valRep, { green: 1.15, yellow: 1.30 });
             document.getElementById('rel-mt').innerHTML = this.getSemaphore(valMt, { green: 20, yellow: 25 });
             document.getElementById('rel-mn').innerHTML = this.getSemaphore(valMn, { green: 15, yellow: 20 });
             document.getElementById('mac-brecha').innerHTML = this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true);
             document.getElementById('rel-usd').textContent = 'u$s ' + (ter / dbl).toFixed(2);
+
+            // NUEVO: Renderizar modelo de categorías y gráfico
+            const categorias = this.buildCategoryModel(d);
+            const chartData = this.getChartData(categorias);
+            this.drawChart(chartData);
         }
     };
     document.addEventListener('DOMContentLoaded', () => { FEMP.init(); });
