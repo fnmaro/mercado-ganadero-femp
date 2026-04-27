@@ -268,82 +268,71 @@
             return `<span class="badge" style="background:rgba(255,71,87,0.15);color:var(--red);border:1px solid var(--red)">🔴 ${vStr}</span>`;
         },
 
-        // INYECCIÓN BLINDADA ABSOLUTA - Sin validaciones de rango
+        // INYECCIÓN BLINDADA: muestra el ÚLTIMO PRECIO REAL con timestamp. Si no hay dato → "--"
         setVal(vId, mId, obj, prefix = '$', suffix = '') {
-            const elVal = document.getElementById(vId);
-            const elMeta = mId ? document.getElementById(mId) : null;
+            const valEl = document.getElementById(vId);
+            const metaEl = mId ? document.getElementById(mId) : null;
             
-            if (!obj || obj.precio === undefined || obj.precio === null) { 
-                if (elVal) elVal.textContent = '--'; 
-                if (elMeta) elMeta.textContent = 'Sin datos disponibles'; 
+            if (!obj || obj.precio === undefined || obj.precio === null || isNaN(obj.precio)) {
+                if (valEl) valEl.textContent = '--'; 
+                if (metaEl) metaEl.textContent = '--'; 
                 return; 
             }
             
-            const precioRaw = parseFloat(obj.precio);
-            if (isNaN(precioRaw)) {
-                if (elVal) elVal.textContent = '--';
-                if (elMeta) elMeta.textContent = 'Dato inválido';
-                return;
-            }
-            
-            // Aplicar factor pie/gancho si corresponde
-            let precio = precioRaw;
+            let precio = obj.precio;
             const tipoPrecio = obj.price_type || 'pie';
+            
+            // Conversión pie/gancho solo si el dato original es del tipo opuesto al solicitado
             if (this.priceType === 'gancho' && tipoPrecio === 'pie') {
-                precio = precioRaw * 0.58;
+                precio = precio * 0.58;
             } else if (this.priceType === 'pie' && tipoPrecio === 'gancho') {
-                precio = precioRaw / 0.58;
+                precio = precio / 0.58;
             }
             
-            if (elVal) elVal.textContent = `${prefix}${this.fmt(Math.round(precio))}${suffix}`;
+            if (valEl) valEl.textContent = `${prefix}${this.fmt(Math.round(precio))}${suffix}`;
             
-            if (elMeta) {
+            if (metaEl) {
                 const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
                 const h = obj.hora || '--';
                 const fte = obj.fuente || '--';
                 const lug = obj.lugar || '--';
                 const w = obj.weight_range ? `<span class="weight-tag">${obj.weight_range} kg</span>` : '';
                 const pt = obj.price_type ? `<span class="cat-tag">${obj.price_type.toUpperCase()}</span>` : '';
-                elMeta.innerHTML = `📝 ${fte} ${pt}<br> 📍 ${lug} ${w}| 🗓️ ${f} ⏰ ${h}`;
+                metaEl.innerHTML = `📝 ${fte} ${pt}<br> 📍 ${lug} ${w}| 🗓️ ${f} ⏰ ${h}`;
             }
         },
 
-        // Renderiza fila de exportación con Pie + Gancho. Si falta uno, muestra solo el disponible.
+        // Renderiza fila de exportación con Pie + Gancho. Si falta uno, muestra "--" sin romper layout.
         setExportVal(idBase, obj) {
             const pieEl   = document.getElementById(idBase + '-pie');
             const ganEl   = document.getElementById(idBase + '-gancho');
             const metaEl  = document.getElementById('m-' + idBase);
             
-            // Si no hay objeto válido
+            // Si no hay objeto válido con algún precio
             if (!obj || (obj.pie === undefined && obj.gancho === undefined && obj.precio === undefined)) {
                 if (pieEl)  pieEl.textContent  = '--';
                 if (ganEl)  ganEl.textContent  = '--';
-                if (metaEl) metaEl.textContent = 'Sin datos disponibles';
+                if (metaEl) metaEl.textContent = '--';
                 return;
             }
             
             // Extraer precios: soporta {pie: X, gancho: Y} o {precio: X, price_type: 'pie'|'gancho'}
-            let pie = undefined;
-            let gancho = undefined;
+            let pie   = obj.pie;
+            let gancho = obj.gancho;
             
-            if (obj.pie !== undefined) {
-                pie = parseFloat(obj.pie);
-            } else if (obj.price_type === 'pie' && obj.precio !== undefined) {
-                pie = parseFloat(obj.precio);
+            if (pie === undefined && obj.precio !== undefined && obj.price_type === 'pie') {
+                pie = obj.precio;
+            }
+            if (gancho === undefined && obj.precio !== undefined && obj.price_type === 'gancho') {
+                gancho = obj.precio;
+            }
+            // Si solo viene precio sin tipo, asumimos pie
+            if (pie === undefined && gancho === undefined && obj.precio !== undefined) {
+                pie = obj.precio;
             }
             
-            if (obj.gancho !== undefined) {
-                gancho = parseFloat(obj.gancho);
-            } else if (obj.price_type === 'gancho' && obj.precio !== undefined) {
-                gancho = parseFloat(obj.precio);
-            }
-            
-            // Validar que sean números válidos
-            const pieValido = pie !== undefined && !isNaN(pie);
-            const ganchoValido = gancho !== undefined && !isNaN(gancho);
-            
-            if (pieEl)   pieEl.textContent  = pieValido   ? '$' + this.fmt(Math.round(pie)) : '--';
-            if (ganEl)   ganEl.textContent  = ganchoValido ? '$' + this.fmt(Math.round(gancho)) : '--';
+            if (pieEl)   pieEl.textContent  = (pie !== undefined && !isNaN(pie)) ? '$' + this.fmt(Math.round(pie)) : '--';
+            if (ganEl)   ganEl.textContent  = (gancho !== undefined && !isNaN(gancho)) ? '$' + this.fmt(Math.round(gancho)) : '--';
             
             if (metaEl) {
                 const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
@@ -354,6 +343,7 @@
             }
         },
 
+        // Construye modelo unificado desde datos planos (compatibilidad) o estructurados
         buildCategoryModel(d) {
             const model = { consumo: {}, exportacion: {}, invernada: {} };
             
@@ -387,19 +377,17 @@
                     
                     cfg.sources.forEach(src => {
                         const obj = flat[src];
-                        if (obj && obj.precio !== undefined && obj.precio !== null) {
-                            const precioNum = parseFloat(obj.precio);
-                            if (!isNaN(precioNum)) {
-                                if (cfg.hasWeight && !obj.weight_range) {
-                                    if (src.includes('ternero')) obj.weight_range = '160-180';
-                                    if (src.includes('novillito')) obj.weight_range = '200-250';
-                                    if (src.includes('vaquillona180')) obj.weight_range = '180-200';
-                                    if (src.includes('vaquillona220')) obj.weight_range = '220-250';
-                                    if (src.includes('vaquillona') && !src.includes('180') && !src.includes('220')) obj.weight_range = '270-390';
-                                }
-                                if (!obj.price_type) obj.price_type = 'pie';
-                                items.push(obj);
+                        if (obj && obj.precio !== undefined && !isNaN(obj.precio)) {
+                            const item = { ...obj };
+                            if (cfg.hasWeight && !item.weight_range) {
+                                if (src.includes('ternero')) item.weight_range = '160-180';
+                                if (src.includes('novillito')) item.weight_range = '200-250';
+                                if (src.includes('vaquillona180')) item.weight_range = '180-200';
+                                if (src.includes('vaquillona220')) item.weight_range = '220-250';
+                                if (src.includes('vaquillona') && !src.includes('180') && !src.includes('220')) item.weight_range = '270-390';
                             }
+                            if (!item.price_type) item.price_type = 'pie';
+                            items.push(item);
                         }
                     });
                     
@@ -421,6 +409,7 @@
             return model;
         },
 
+        // Obtiene datos filtrados para el gráfico según controles UI
         getChartData(categorias) {
             const data = [];
             const sistema = document.getElementById('filter-sistema').value;
@@ -436,37 +425,36 @@
                     const item = categorias[sys][cat];
                     if (!item) return;
                     
+                    // Invernada con rangos de peso anidados
                     if (typeof item === 'object' && !item.precio) {
                         Object.keys(item).forEach(wr => {
                             if (peso !== 'all' && peso !== wr) return;
                             const arr = item[wr];
                             const latest = Array.isArray(arr) ? arr[arr.length - 1] : arr;
-                            if (latest && latest.precio !== undefined && latest.precio !== null) {
-                                const p = parseFloat(latest.precio);
-                                if (!isNaN(p)) {
-                                    let precio = p;
-                                    if (this.priceType === 'gancho' && (latest.price_type || 'pie') === 'pie') precio = p * 0.58;
-                                    data.push({
-                                        label: `${this.categoryMap[sys][cat].label} ${wr}`,
-                                        value: Math.round(precio),
-                                        sistema: sys,
-                                        color: this.catColors[data.length % this.catColors.length]
-                                    });
+                            if (latest && latest.precio !== undefined && !isNaN(latest.precio)) {
+                                let precio = latest.precio;
+                                if (this.priceType === 'gancho' && (latest.price_type || 'pie') === 'pie') {
+                                    precio = precio * 0.58;
                                 }
+                                data.push({
+                                    label: `${this.categoryMap[sys][cat].label} ${wr}`,
+                                    value: Math.round(precio),
+                                    sistema: sys,
+                                    color: this.catColors[data.length % this.catColors.length]
+                                });
                             }
                         });
-                    } else if (item.precio !== undefined && item.precio !== null) {
-                        const p = parseFloat(item.precio);
-                        if (!isNaN(p)) {
-                            let precio = p;
-                            if (this.priceType === 'gancho' && (item.price_type || 'pie') === 'pie') precio = p * 0.58;
-                            data.push({
-                                label: this.categoryMap[sys][cat].label,
-                                value: Math.round(precio),
-                                sistema: sys,
-                                color: this.catColors[data.length % this.catColors.length]
-                            });
+                    } else if (item.precio !== undefined && !isNaN(item.precio)) {
+                        let precio = item.precio;
+                        if (this.priceType === 'gancho' && (item.price_type || 'pie') === 'pie') {
+                            precio = precio * 0.58;
                         }
+                        data.push({
+                            label: this.categoryMap[sys][cat].label,
+                            value: Math.round(precio),
+                            sistema: sys,
+                            color: this.catColors[data.length % this.catColors.length]
+                        });
                     }
                 });
             });
@@ -474,6 +462,7 @@
             return data;
         },
 
+        // Renderiza gráfico de barras con Canvas API nativa
         drawChart(data) {
             const canvas = document.getElementById('catChart');
             const ctx = canvas.getContext('2d');
@@ -499,6 +488,9 @@
                 ctx.font = '14px Segoe UI';
                 ctx.textAlign = 'center';
                 ctx.fillText('No hay datos para los filtros seleccionados', w/2, h/2);
+                
+                const legend = document.getElementById('chartLegend');
+                legend.innerHTML = '';
                 return;
             }
             
@@ -506,6 +498,7 @@
             const barWidth = Math.min(60, (chartW / data.length) * 0.6);
             const gap = (chartW - (barWidth * data.length)) / (data.length + 1);
             
+            // Ejes
             ctx.strokeStyle = 'rgba(255,255,255,0.1)';
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -514,6 +507,7 @@
             ctx.lineTo(w - padding.right, h - padding.bottom);
             ctx.stroke();
             
+            // Líneas horizontales
             for (let i = 0; i <= 5; i++) {
                 const y = padding.top + chartH - (chartH * (i/5));
                 ctx.strokeStyle = 'rgba(255,255,255,0.05)';
@@ -528,6 +522,7 @@
                 ctx.fillText(this.fmt(Math.round(maxVal * (i/5))), padding.left - 8, y + 4);
             }
             
+            // Barras
             data.forEach((d, i) => {
                 const x = padding.left + gap + i * (barWidth + gap);
                 const barH = (d.value / maxVal) * chartH;
@@ -557,6 +552,7 @@
                 ctx.restore();
             });
             
+            // Leyenda HTML
             const legend = document.getElementById('chartLegend');
             legend.innerHTML = data.map(d => `
                 <div class="chart-legend-item">
@@ -566,6 +562,7 @@
             `).join('');
         },
 
+        // Actualiza opciones de categoría según sistema seleccionado
         updateCategoriaOptions() {
             const sistema = document.getElementById('filter-sistema').value;
             const select = document.getElementById('filter-categoria');
@@ -597,7 +594,11 @@
         },
 
         applyFilters() {
-            if (this.rawData) this.render(this.rawData);
+            if (this.rawData) {
+                const categorias = this.buildCategoryModel(this.rawData);
+                const chartData = this.getChartData(categorias);
+                this.drawChart(chartData);
+            }
         },
 
         init() {
@@ -628,9 +629,12 @@
             document.getElementById('fSync').textContent = new Date(d._syncTime).toLocaleString('es-AR');
             document.getElementById('fConf').innerHTML = `<span class="sem ${d._confianza >= 80 ? 'sem-g' : 'sem-y'}"></span> ${d._confianza}%`;
             document.getElementById('fMerc').innerHTML = d.diaMercado ? '<span class="v-green">ABIERTO</span>' : '<span class="v-red">CERRADO</span>';
+            
             if (!d.diaMercado) { 
                 document.getElementById('alertBox').className = 'alert-banner show warn'; 
                 document.getElementById('alertMsg').textContent = d._nota || 'Mercado cerrado hoy. Mostrando últimos valores de cotización hábiles.'; 
+            } else {
+                document.getElementById('alertBox').className = 'alert-banner';
             }
 
             if (d.ganaderoIndex) {
@@ -638,12 +642,14 @@
                 document.getElementById('idx-sma7').textContent = d.senalMercado?.sma7 || '--';
                 document.getElementById('idx-sma15').textContent = d.senalMercado?.sma15 || '--';
                 const sig = d.senalMercado?.tendencia || 'MANTENER';
-                const sEl = document.getElementById('idx-signal'); sEl.textContent = sig;
+                const sEl = document.getElementById('idx-signal'); 
+                sEl.textContent = sig;
                 if (sig === 'COMPRA') { sEl.style.background = 'rgba(0,255,136,0.2)'; sEl.style.color = 'var(--green)'; sEl.style.border = '1px solid var(--green)'; }
                 else if (sig === 'VENTA') { sEl.style.background = 'rgba(255,71,87,0.2)'; sEl.style.color = 'var(--red)'; sEl.style.border = '1px solid var(--red)'; }
                 else { sEl.style.background = 'rgba(255,215,0,0.2)'; sEl.style.color = 'var(--yellow)'; sEl.style.border = '1px solid var(--yellow)'; }
             }
 
+            // Entradas Cañuelas
             const entHoy = parseInt(d.canuelas?.entrada) || 0;
             const entSem = parseInt(d.canuelas?.entradaSemanal) || 0;
             document.getElementById('mag-hoy').textContent = this.fmt(entHoy);
@@ -653,30 +659,24 @@
             const ch = d.canuelas?.hora || '--';
             document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Último Parte: ${cf} ⏰ ${ch}`;
 
-            // Precios originales (compatibilidad absoluta)
+            // Precios Mercado de Cañuelas
             this.setVal('mag-nov', 'm-mag-nov', d.canuelas?.novilloGordo);
             this.setVal('mag-n431', 'm-mag-n431', d.canuelas?.novillo431);
             this.setVal('mag-nt300', 'm-mag-nt300', d.canuelas?.novillito300);
             this.setVal('mag-vaq', 'm-mag-vaq', d.canuelas?.vaquillona270);
             this.setVal('mag-vaca', 'm-mag-vaca', d.canuelas?.vacaGorda);
 
+            // Invernada
             this.setVal('inv-ter', 'm-inv-ter', d.ceres?.ternero);
             this.setVal('inv-nov', 'm-inv-nov', d.ceres?.novillito);
             this.setVal('inv-vaq', 'm-inv-vaq', d.ceres?.vaquillona);
+            this.setVal('inv-vaq-180', 'm-inv-vaq-180', d.ceres?.vaquillona180);
+            this.setVal('inv-vaq-220', 'm-inv-vaq-220', d.ceres?.vaquillona220);
             
+            // Exportación existente
             this.setVal('exp-nov', 'm-exp-nov', d.apea?.novMestizo);
             this.setVal('exp-vaca', 'm-exp-vaca', d.apea?.vacaConserva);
             this.setVal('exp-hil', 'm-exp-hil', d.apea?.hilton, 'u$s ', '/tn');
-
-            this.setVal('mac-dof', 'm-mac-dof', d.dolar?.oficial);
-            this.setVal('mac-dbl', 'm-mac-dbl', d.dolar?.blue);
-            this.setVal('mac-mep', 'm-mac-mep', d.dolar?.mep);
-            this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
-            this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
-
-            // Invernada extendida
-            this.setVal('inv-vaq-180', 'm-inv-vaq-180', d.ceres?.vaquillona180);
-            this.setVal('inv-vaq-220', 'm-inv-vaq-220', d.ceres?.vaquillona220);
 
             // Exportación extendida (Pie + Gancho)
             this.setExportVal('exp-nov-std',   d.apea?.novilloExportacion || d.apea?.novMestizo);
@@ -684,13 +684,15 @@
             this.setExportVal('exp-vaca-manuf', d.apea?.vacaManufactura);
             this.setExportVal('exp-vaca-cons',  d.apea?.vacaConserva);
 
-            // CÁLCULOS MACRO
-            const ext = (obj) => {
-                if (!obj || obj.precio === undefined || obj.precio === null) return 0;
-                const p = parseFloat(obj.precio);
-                return isNaN(p) ? 0 : p;
-            };
-            
+            // Macroeconomía
+            this.setVal('mac-dof', 'm-mac-dof', d.dolar?.oficial);
+            this.setVal('mac-dbl', 'm-mac-dbl', d.dolar?.blue);
+            this.setVal('mac-mep', 'm-mac-mep', d.dolar?.mep);
+            this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
+            this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
+
+            // Cálculos macro
+            const ext = (obj) => parseFloat(obj?.precio || 0);
             const ter = ext(d.ceres?.ternero) || 0;
             const novG = ext(d.canuelas?.novilloGordo) || 0;
             const mK = (ext(d.granos?.maiz) || 0) / 1000;
@@ -708,7 +710,7 @@
             document.getElementById('mac-brecha').innerHTML = valBrecha > 0 ? this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true) : '--';
             document.getElementById('rel-usd').textContent = (ter > 0 && dbl > 0) ? 'u$s ' + (ter / dbl).toFixed(2) : 'u$s --';
 
-            // Gráfico
+            // Gráfico con filtros aplicados
             const categorias = this.buildCategoryModel(d);
             const chartData = this.getChartData(categorias);
             this.drawChart(chartData);
