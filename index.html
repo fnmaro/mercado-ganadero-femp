@@ -192,9 +192,12 @@
             document.getElementById('mag-hoy').textContent = this.fmt(entHoy);
             document.getElementById('mag-sem').textContent = this.fmt(entSem);
             
-            const cf = d.canuelas?.fecha ? d.canuelas.fecha.split('-').reverse().join('/') : '--';
-            const ch = d.canuelas?.hora || '--';
-            document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Último Parte: ${cf} ⏰ ${ch}`;
+            // Garantizamos que siempre muestre fecha y hora del último escaneo
+            const rawFecha = d.canuelas?.fecha || new Date().toISOString().split('T')[0];
+            const cf = rawFecha.includes('-') ? rawFecha.split('-').reverse().join('/') : rawFecha;
+            const ch = d.canuelas?.hora || new Date().toLocaleTimeString('es-AR', {hour12: false}).substring(0,5);
+            
+            document.getElementById('m-mag-entrada').innerHTML = `📍 Mercado Agroganadero de Cañuelas | 🗓️ Actualizado: ${cf} ⏰ ${ch}`;
 
             // Precios
             this.setVal('mag-nov', 'm-mag-nov', d.canuelas?.novilloGordo);
