@@ -33,7 +33,7 @@
         .highlight-box { background: rgba(0,255,136,0.1); border-left: 4px solid var(--green); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; }
         .subsection-title { color: var(--text-dim); font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin: 15px 0 5px 0; }
         
-        /* NUEVO: Filtros y controles */
+        /* Filtros y controles */
         .control-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 15px 20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
         .control-group { display: flex; flex-direction: column; gap: 5px; }
         .control-group label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
@@ -45,7 +45,7 @@
         .toggle-group button { flex: 1; background: transparent; border: none; color: var(--text-dim); padding: 8px 16px; cursor: pointer; font-size: 0.85em; font-weight: 600; }
         .toggle-group button.active { background: rgba(255,215,0,0.2); color: var(--gold); }
         
-        /* NUEVO: Gráfico */
+        /* Gráfico */
         .chart-container { position: relative; height: 320px; width: 100%; margin-top: 15px; }
         .chart-legend { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 10px; font-size: 0.8em; }
         .chart-legend-item { display: flex; align-items: center; gap: 6px; }
@@ -53,7 +53,7 @@
         .cat-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(116,185,255,0.15); color: var(--blue); margin-left: 8px; }
         .weight-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: rgba(162,155,254,0.15); color: var(--purple); margin-left: 4px; }
         
-        /* NUEVO: Exportación dual Pie/Gancho */
+        /* Exportación dual Pie/Gancho */
         .dual-price { display: flex; gap: 18px; text-align: right; }
         .dual-price .col { display: flex; flex-direction: column; align-items: flex-end; }
         .dual-price .col .lbl { font-size: 0.7em; color: #888; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <!-- NUEVO: Panel de Filtros -->
+        <!-- Panel de Filtros -->
         <div class="control-panel">
             <div class="control-group">
                 <label>Sistema</label>
@@ -129,7 +129,7 @@
         </div>
 
         <div class="grid">
-            <!-- BLOQUE ORIGINAL: Mercado de Cañuelas -->
+            <!-- Mercado de Cañuelas -->
             <div class="block">
                 <div class="block-header"><h2>🏛️ MERCADO DE CAÑUELAS</h2><span class="badge" style="background: #333; color: #fff;">MAG</span></div>
                 <div class="highlight-box">
@@ -146,7 +146,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Vaca Gorda Consumo</span><span class="meta" id="m-mag-vaca">--</span></div><span class="value" id="mag-vaca">$--</span></div>
             </div>
 
-            <!-- BLOQUE MODIFICADO: Invernada y Exportación -->
+            <!-- Invernada y Exportación -->
             <div class="block">
                 <div class="block-header"><h2>🌾 INVERNADA Y EXPORTACIÓN</h2><span class="badge" style="background: var(--purple); color: #fff;">REFERENCIAS</span></div>
                 
@@ -196,7 +196,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Cuota Hilton (Valor FOB)</span><span class="meta" id="m-exp-hil">--</span></div><span class="value" id="exp-hil">u$s --</span></div>
             </div>
 
-            <!-- BLOQUE ORIGINAL: Macroeconomía -->
+            <!-- Macroeconomía -->
             <div class="block">
                 <div class="block-header"><h2>💱 MACROECONOMÍA AGRO</h2></div>
                 <div class="data-row"><div class="data-col"><span class="label">Dólar Oficial (BNA)</span><span class="meta" id="m-mac-dof">--</span></div><span class="value" id="mac-dof">$--</span></div>
@@ -206,7 +206,7 @@
                 <div class="data-row"><div class="data-col"><span class="label">Soja Pizarra (Rosario)</span><span class="meta" id="m-mac-soja">--</span></div><span class="value v-green" id="mac-soja">$--</span></div>
             </div>
 
-            <!-- NUEVO: Gráfico por Categoría -->
+            <!-- Gráfico por Categoría -->
             <div class="block full-width">
                 <div class="block-header">
                     <h2>📊 VISUALIZACIÓN POR CATEGORÍA</h2>
@@ -218,7 +218,7 @@
                 <div class="chart-legend" id="chartLegend"></div>
             </div>
 
-            <!-- BLOQUE ORIGINAL: Indicadores Técnicos -->
+            <!-- Indicadores Técnicos -->
             <div class="block full-width" style="border-top: 3px solid var(--gold);">
                 <div class="block-header"><h2>⚖️ INDICADORES TÉCNICOS Y RELACIONES CLAVE</h2></div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
@@ -256,7 +256,8 @@
         },
 
         fmt(v) { 
-            const n = Number(v); return (!isNaN(n) && v !== null && v !== undefined) ? n.toLocaleString('es-AR') : '--'; 
+            const n = Number(v); 
+            return (!isNaN(n) && v !== null && v !== undefined) ? n.toLocaleString('es-AR') : '--'; 
         },
         
         getSemaphore(val, thresholds, isPercentage = false) {
@@ -267,52 +268,82 @@
             return `<span class="badge" style="background:rgba(255,71,87,0.15);color:var(--red);border:1px solid var(--red)">🔴 ${vStr}</span>`;
         },
 
+        // INYECCIÓN BLINDADA ABSOLUTA - Sin validaciones de rango
         setVal(vId, mId, obj, prefix = '$', suffix = '') {
-            if (!obj || obj.precio === undefined) { 
-                document.getElementById(vId).textContent = '--'; 
-                if(mId) document.getElementById(mId).textContent = 'Procesando origen de datos...'; 
+            const elVal = document.getElementById(vId);
+            const elMeta = mId ? document.getElementById(mId) : null;
+            
+            if (!obj || obj.precio === undefined || obj.precio === null) { 
+                if (elVal) elVal.textContent = '--'; 
+                if (elMeta) elMeta.textContent = 'Sin datos disponibles'; 
                 return; 
             }
             
-            let precio = obj.precio;
-            const tipoPrecio = obj.price_type || 'pie';
-            if (this.priceType === 'gancho' && tipoPrecio === 'pie') {
-                precio = precio * 0.58;
-            } else if (this.priceType === 'pie' && tipoPrecio === 'gancho') {
-                precio = precio / 0.58;
+            const precioRaw = parseFloat(obj.precio);
+            if (isNaN(precioRaw)) {
+                if (elVal) elVal.textContent = '--';
+                if (elMeta) elMeta.textContent = 'Dato inválido';
+                return;
             }
             
-            document.getElementById(vId).textContent = `${prefix}${this.fmt(Math.round(precio))}${suffix}`;
+            // Aplicar factor pie/gancho si corresponde
+            let precio = precioRaw;
+            const tipoPrecio = obj.price_type || 'pie';
+            if (this.priceType === 'gancho' && tipoPrecio === 'pie') {
+                precio = precioRaw * 0.58;
+            } else if (this.priceType === 'pie' && tipoPrecio === 'gancho') {
+                precio = precioRaw / 0.58;
+            }
             
-            if(mId) {
+            if (elVal) elVal.textContent = `${prefix}${this.fmt(Math.round(precio))}${suffix}`;
+            
+            if (elMeta) {
                 const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
                 const h = obj.hora || '--';
                 const fte = obj.fuente || '--';
                 const lug = obj.lugar || '--';
                 const w = obj.weight_range ? `<span class="weight-tag">${obj.weight_range} kg</span>` : '';
                 const pt = obj.price_type ? `<span class="cat-tag">${obj.price_type.toUpperCase()}</span>` : '';
-                document.getElementById(mId).innerHTML = `📝 ${fte} ${pt}<br> 📍 ${lug} ${w}| 🗓️ ${f} ⏰ ${h}`;
+                elMeta.innerHTML = `📝 ${fte} ${pt}<br> 📍 ${lug} ${w}| 🗓️ ${f} ⏰ ${h}`;
             }
         },
 
-        // NUEVO: Renderiza fila de exportación con Pie + Gancho
+        // Renderiza fila de exportación con Pie + Gancho. Si falta uno, muestra solo el disponible.
         setExportVal(idBase, obj) {
             const pieEl   = document.getElementById(idBase + '-pie');
             const ganEl   = document.getElementById(idBase + '-gancho');
             const metaEl  = document.getElementById('m-' + idBase);
             
+            // Si no hay objeto válido
             if (!obj || (obj.pie === undefined && obj.gancho === undefined && obj.precio === undefined)) {
                 if (pieEl)  pieEl.textContent  = '--';
                 if (ganEl)  ganEl.textContent  = '--';
-                if (metaEl) metaEl.textContent = 'Procesando origen de datos...';
+                if (metaEl) metaEl.textContent = 'Sin datos disponibles';
                 return;
             }
             
-            const pie   = obj.pie !== undefined ? obj.pie : (obj.price_type === 'pie' ? obj.precio : undefined);
-            const gancho = obj.gancho !== undefined ? obj.gancho : (obj.price_type === 'gancho' ? obj.precio : undefined);
+            // Extraer precios: soporta {pie: X, gancho: Y} o {precio: X, price_type: 'pie'|'gancho'}
+            let pie = undefined;
+            let gancho = undefined;
             
-            if (pieEl)   pieEl.textContent  = pie   !== undefined ? '$' + this.fmt(Math.round(pie)) : '--';
-            if (ganEl)   ganEl.textContent  = gancho !== undefined ? '$' + this.fmt(Math.round(gancho)) : '--';
+            if (obj.pie !== undefined) {
+                pie = parseFloat(obj.pie);
+            } else if (obj.price_type === 'pie' && obj.precio !== undefined) {
+                pie = parseFloat(obj.precio);
+            }
+            
+            if (obj.gancho !== undefined) {
+                gancho = parseFloat(obj.gancho);
+            } else if (obj.price_type === 'gancho' && obj.precio !== undefined) {
+                gancho = parseFloat(obj.precio);
+            }
+            
+            // Validar que sean números válidos
+            const pieValido = pie !== undefined && !isNaN(pie);
+            const ganchoValido = gancho !== undefined && !isNaN(gancho);
+            
+            if (pieEl)   pieEl.textContent  = pieValido   ? '$' + this.fmt(Math.round(pie)) : '--';
+            if (ganEl)   ganEl.textContent  = ganchoValido ? '$' + this.fmt(Math.round(gancho)) : '--';
             
             if (metaEl) {
                 const f = obj.fecha ? obj.fecha.split('-').reverse().join('/') : '--';
@@ -356,16 +387,19 @@
                     
                     cfg.sources.forEach(src => {
                         const obj = flat[src];
-                        if (obj && obj.precio !== undefined) {
-                            if (cfg.hasWeight && !obj.weight_range) {
-                                if (src.includes('ternero')) obj.weight_range = '160-180';
-                                if (src.includes('novillito')) obj.weight_range = '200-250';
-                                if (src.includes('vaquillona180')) obj.weight_range = '180-200';
-                                if (src.includes('vaquillona220')) obj.weight_range = '220-250';
-                                if (src.includes('vaquillona') && !src.includes('180') && !src.includes('220')) obj.weight_range = '270-390';
+                        if (obj && obj.precio !== undefined && obj.precio !== null) {
+                            const precioNum = parseFloat(obj.precio);
+                            if (!isNaN(precioNum)) {
+                                if (cfg.hasWeight && !obj.weight_range) {
+                                    if (src.includes('ternero')) obj.weight_range = '160-180';
+                                    if (src.includes('novillito')) obj.weight_range = '200-250';
+                                    if (src.includes('vaquillona180')) obj.weight_range = '180-200';
+                                    if (src.includes('vaquillona220')) obj.weight_range = '220-250';
+                                    if (src.includes('vaquillona') && !src.includes('180') && !src.includes('220')) obj.weight_range = '270-390';
+                                }
+                                if (!obj.price_type) obj.price_type = 'pie';
+                                items.push(obj);
                             }
-                            if (!obj.price_type) obj.price_type = 'pie';
-                            items.push(obj);
                         }
                     });
                     
@@ -407,26 +441,32 @@
                             if (peso !== 'all' && peso !== wr) return;
                             const arr = item[wr];
                             const latest = Array.isArray(arr) ? arr[arr.length - 1] : arr;
-                            if (latest && latest.precio) {
-                                let precio = latest.precio;
-                                if (this.priceType === 'gancho' && (latest.price_type || 'pie') === 'pie') precio = precio * 0.58;
-                                data.push({
-                                    label: `${this.categoryMap[sys][cat].label} ${wr}`,
-                                    value: Math.round(precio),
-                                    sistema: sys,
-                                    color: this.catColors[data.length % this.catColors.length]
-                                });
+                            if (latest && latest.precio !== undefined && latest.precio !== null) {
+                                const p = parseFloat(latest.precio);
+                                if (!isNaN(p)) {
+                                    let precio = p;
+                                    if (this.priceType === 'gancho' && (latest.price_type || 'pie') === 'pie') precio = p * 0.58;
+                                    data.push({
+                                        label: `${this.categoryMap[sys][cat].label} ${wr}`,
+                                        value: Math.round(precio),
+                                        sistema: sys,
+                                        color: this.catColors[data.length % this.catColors.length]
+                                    });
+                                }
                             }
                         });
-                    } else if (item.precio) {
-                        let precio = item.precio;
-                        if (this.priceType === 'gancho' && (item.price_type || 'pie') === 'pie') precio = precio * 0.58;
-                        data.push({
-                            label: this.categoryMap[sys][cat].label,
-                            value: Math.round(precio),
-                            sistema: sys,
-                            color: this.catColors[data.length % this.catColors.length]
-                        });
+                    } else if (item.precio !== undefined && item.precio !== null) {
+                        const p = parseFloat(item.precio);
+                        if (!isNaN(p)) {
+                            let precio = p;
+                            if (this.priceType === 'gancho' && (item.price_type || 'pie') === 'pie') precio = p * 0.58;
+                            data.push({
+                                label: this.categoryMap[sys][cat].label,
+                                value: Math.round(precio),
+                                sistema: sys,
+                                color: this.catColors[data.length % this.catColors.length]
+                            });
+                        }
                     }
                 });
             });
@@ -634,35 +674,39 @@
             this.setVal('mac-maiz', 'm-mac-maiz', d.granos?.maiz, '$', '/tn');
             this.setVal('mac-soja', 'm-mac-soja', d.granos?.soja, '$', '/tn');
 
-            // NUEVO: Invernada extendida
+            // Invernada extendida
             this.setVal('inv-vaq-180', 'm-inv-vaq-180', d.ceres?.vaquillona180);
             this.setVal('inv-vaq-220', 'm-inv-vaq-220', d.ceres?.vaquillona220);
 
-            // NUEVO: Exportación extendida (Pie + Gancho)
+            // Exportación extendida (Pie + Gancho)
             this.setExportVal('exp-nov-std',   d.apea?.novilloExportacion || d.apea?.novMestizo);
             this.setExportVal('exp-vaca-gorda', d.apea?.vacaGorda);
             this.setExportVal('exp-vaca-manuf', d.apea?.vacaManufactura);
             this.setExportVal('exp-vaca-cons',  d.apea?.vacaConserva);
 
             // CÁLCULOS MACRO
-            const ext = (obj) => parseFloat(obj?.precio || 0);
+            const ext = (obj) => {
+                if (!obj || obj.precio === undefined || obj.precio === null) return 0;
+                const p = parseFloat(obj.precio);
+                return isNaN(p) ? 0 : p;
+            };
             
-            const ter = ext(d.ceres?.ternero) || 6373;
-            const novG = ext(d.canuelas?.novilloGordo) || 4419;
-            const mK = (ext(d.granos?.maiz) || 257184) / 1000;
-            const dof = ext(d.dolar?.oficial) || 1400;
-            const dbl = ext(d.dolar?.blue) || 1410;
+            const ter = ext(d.ceres?.ternero) || 0;
+            const novG = ext(d.canuelas?.novilloGordo) || 0;
+            const mK = (ext(d.granos?.maiz) || 0) / 1000;
+            const dof = ext(d.dolar?.oficial) || 0;
+            const dbl = ext(d.dolar?.blue) || 0;
 
-            const valRep = parseFloat((ter / novG).toFixed(2));
-            const valMt = parseFloat((ter / mK).toFixed(1));
-            const valMn = parseFloat((novG / mK).toFixed(1));
-            const valBrecha = parseFloat((((dbl - dof) / dof) * 100).toFixed(1));
+            const valRep = (ter > 0 && novG > 0) ? parseFloat((ter / novG).toFixed(2)) : 0;
+            const valMt = (ter > 0 && mK > 0) ? parseFloat((ter / mK).toFixed(1)) : 0;
+            const valMn = (novG > 0 && mK > 0) ? parseFloat((novG / mK).toFixed(1)) : 0;
+            const valBrecha = (dof > 0 && dbl > 0) ? parseFloat((((dbl - dof) / dof) * 100).toFixed(1)) : 0;
 
-            document.getElementById('rel-tn').innerHTML = this.getSemaphore(valRep, { green: 1.15, yellow: 1.30 });
-            document.getElementById('rel-mt').innerHTML = this.getSemaphore(valMt, { green: 20, yellow: 25 });
-            document.getElementById('rel-mn').innerHTML = this.getSemaphore(valMn, { green: 15, yellow: 20 });
-            document.getElementById('mac-brecha').innerHTML = this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true);
-            document.getElementById('rel-usd').textContent = 'u$s ' + (ter / dbl).toFixed(2);
+            document.getElementById('rel-tn').innerHTML = valRep > 0 ? this.getSemaphore(valRep, { green: 1.15, yellow: 1.30 }) : '--';
+            document.getElementById('rel-mt').innerHTML = valMt > 0 ? this.getSemaphore(valMt, { green: 20, yellow: 25 }) : '--';
+            document.getElementById('rel-mn').innerHTML = valMn > 0 ? this.getSemaphore(valMn, { green: 15, yellow: 20 }) : '--';
+            document.getElementById('mac-brecha').innerHTML = valBrecha > 0 ? this.getSemaphore(valBrecha, { green: 20, yellow: 40 }, true) : '--';
+            document.getElementById('rel-usd').textContent = (ter > 0 && dbl > 0) ? 'u$s ' + (ter / dbl).toFixed(2) : 'u$s --';
 
             // Gráfico
             const categorias = this.buildCategoryModel(d);
