@@ -257,44 +257,45 @@
   {
     "fecha": "2026-04-27",
     "canuelas": {
-      "fecha": "2026-04-24",
-      "entrada": 8442,
+      "fecha": "2026-04-27",
+      "hora": "12:13",
+      "entrada": 0,
       "vacaGorda": {
         "precio": 3197,
-        "unidad": "$/kg",
-        "categoria": "Buenas",
-        "fecha": "2026-04-24",
-        "fuente": "Canuelas (seed)"
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero"
       },
       "novilloGordo": {
         "precio": 4419,
-        "fecha": "2026-04-24",
-        "hora": "10:48",
+        "fecha": "2026-04-27",
+        "hora": "12:13",
         "lugar": "MAG Cañuelas",
-        "fuente": "Canuelas (seed)"
+        "fuente": "Mercado Agroganadero"
       },
       "novillo431": {
         "precio": 4531,
-        "unidad": "$/kg",
-        "categoria": "Mest.EyB 431/460",
-        "fecha": "2026-04-24",
-        "fuente": "Canuelas (seed)"
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero"
       },
       "vaquillona270": {
         "precio": 4921,
-        "unidad": "$/kg",
-        "categoria": "EyB 270/390",
-        "fecha": "2026-04-24",
-        "fuente": "Canuelas (seed)"
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero"
       },
       "novillito300": {
         "precio": 4954,
-        "unidad": "$/kg",
-        "categoria": "EyB 300/390",
-        "fecha": "2026-04-24",
-        "fuente": "Canuelas (seed)"
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero"
       },
-      "entradaSemanal": 8442
+      "entradaSemanal": 0
     },
     "ceres": {
       "fecha": "2026-04-24",
@@ -319,21 +320,21 @@
       "hilton": {
         "precio": 24000,
         "fecha": "2026-04-27",
-        "hora": "11:05",
+        "hora": "12:13",
         "lugar": "FOB Bs As",
         "fuente": "APEA.org.ar"
       },
       "novMestizo": {
         "precio": 8200,
         "fecha": "2026-04-27",
-        "hora": "11:05",
+        "hora": "12:13",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar"
       },
       "vacaConserva": {
         "precio": 3100,
         "fecha": "2026-04-27",
-        "hora": "11:05",
+        "hora": "12:13",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar"
       }

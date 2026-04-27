@@ -1,31 +1,31 @@
 {
   "fecha": "2026-04-27",
-  "hora": "11:05",
+  "hora": "12:13",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-27T11:05:30.393Z",
-  "_version": "4.4.0-FEMP-Absolute",
+  "_syncTime": "2026-04-27T12:13:50.873Z",
+  "_version": "4.5.0-FEMP-Extended",
   "dolar": {
     "oficial": {
       "precio": 1420,
       "compra": 1370,
       "fecha": "2026-04-24",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
     "blue": {
       "precio": 1420,
-      "fecha": "2026-04-26",
-      "hora": "11:05",
+      "fecha": "2026-04-27",
+      "hora": "12:13",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
     "mep": {
       "precio": 1441.4,
       "compra": 1437,
-      "fecha": "2026-04-26",
-      "hora": "11:05",
+      "fecha": "2026-04-27",
+      "hora": "12:13",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     }
@@ -34,77 +34,78 @@
     "maiz": {
       "precio": 253480,
       "fecha": "2026-04-27",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     },
     "soja": {
       "precio": 430000,
       "fecha": "2026-04-27",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     }
   },
   "canuelas": {
-    "fecha": "2026-04-24",
-    "entrada": 8442,
+    "fecha": "2026-04-27",
+    "hora": "12:13",
+    "entrada": 0,
     "vacaGorda": {
       "precio": 3197,
-      "unidad": "$/kg",
-      "categoria": "Buenas",
-      "fecha": "2026-04-24",
-      "fuente": "Canuelas (seed)"
+      "fecha": "2026-04-27",
+      "hora": "12:13",
+      "lugar": "MAG Cañuelas",
+      "fuente": "Mercado Agroganadero"
     },
     "novilloGordo": {
       "precio": 4419,
-      "fecha": "2026-04-24",
-      "hora": "10:48",
+      "fecha": "2026-04-27",
+      "hora": "12:13",
       "lugar": "MAG Cañuelas",
-      "fuente": "Canuelas (seed)"
+      "fuente": "Mercado Agroganadero"
     },
     "novillo431": {
       "precio": 4531,
-      "unidad": "$/kg",
-      "categoria": "Mest.EyB 431/460",
-      "fecha": "2026-04-24",
-      "fuente": "Canuelas (seed)"
+      "fecha": "2026-04-27",
+      "hora": "12:13",
+      "lugar": "MAG Cañuelas",
+      "fuente": "Mercado Agroganadero"
     },
     "vaquillona270": {
       "precio": 4921,
-      "unidad": "$/kg",
-      "categoria": "EyB 270/390",
-      "fecha": "2026-04-24",
-      "fuente": "Canuelas (seed)"
+      "fecha": "2026-04-27",
+      "hora": "12:13",
+      "lugar": "MAG Cañuelas",
+      "fuente": "Mercado Agroganadero"
     },
     "novillito300": {
       "precio": 4954,
-      "unidad": "$/kg",
-      "categoria": "EyB 300/390",
-      "fecha": "2026-04-24",
-      "fuente": "Canuelas (seed)"
+      "fecha": "2026-04-27",
+      "hora": "12:13",
+      "lugar": "MAG Cañuelas",
+      "fuente": "Mercado Agroganadero"
     },
-    "entradaSemanal": 8442
+    "entradaSemanal": 0
   },
   "apea": {
     "hilton": {
       "precio": 24000,
       "fecha": "2026-04-27",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "FOB Bs As",
       "fuente": "APEA.org.ar"
     },
     "novMestizo": {
       "precio": 8200,
       "fecha": "2026-04-27",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     },
     "vacaConserva": {
       "precio": 3100,
       "fecha": "2026-04-27",
-      "hora": "11:05",
+      "hora": "12:13",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     }
@@ -128,6 +129,57 @@
     "promMesAnterior": 4350,
     "fuente": "Ceres (seed)"
   },
+  "categorias": {
+    "consumo": {
+      "novillo": {
+        "precio": 4419,
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero",
+        "price_type": "pie"
+      },
+      "vaca": {
+        "precio": 3197,
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Mercado Agroganadero",
+        "price_type": "pie"
+      }
+    },
+    "exportacion": {
+      "novillo": {
+        "precio": 8200,
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "Expo Bs As",
+        "fuente": "APEA.org.ar",
+        "price_type": "gancho"
+      },
+      "vaca": {
+        "precio": 3100,
+        "fecha": "2026-04-27",
+        "hora": "12:13",
+        "lugar": "Expo Bs As",
+        "fuente": "APEA.org.ar",
+        "price_type": "pie"
+      }
+    },
+    "invernada": {
+      "ternero": {
+        "160-180": {
+          "precio": 6373,
+          "fecha": "2026-04-27",
+          "hora": "10:48",
+          "lugar": "Predio Ceres, SF",
+          "fuente": "Infocampo / Tradición",
+          "weight_range": "160-180",
+          "price_type": "pie"
+        }
+      }
+    }
+  },
   "ganaderoIndex": 100,
   "senalMercado": {
     "sma7": 100,
@@ -139,7 +191,7 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com",
-      "timestamp": "27/4/2026, 11:05:30",
+      "timestamp": "27/4/2026, 12:13:51",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -147,7 +199,7 @@
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "27/4/2026, 11:05:38",
+      "timestamp": "27/4/2026, 12:13:59",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -155,19 +207,19 @@
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "27/4/2026, 11:05:41",
-      "estado": "FALLO",
-      "confianza": "BAJA"
+      "timestamp": "27/4/2026, 12:14:02",
+      "estado": "OK",
+      "confianza": "ALTA"
     },
     {
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "27/4/2026, 11:05:44",
+      "timestamp": "27/4/2026, 12:14:04",
       "estado": "OK",
       "confianza": "MEDIA"
     }
   ],
   "_errores": [],
-  "_confianza": 88
+  "_confianza": 100
 }
