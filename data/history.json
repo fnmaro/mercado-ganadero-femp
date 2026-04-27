@@ -258,40 +258,40 @@
     "fecha": "2026-04-27",
     "canuelas": {
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "entrada": 0,
       "vacaGorda": {
         "precio": 3197,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero"
       },
       "novilloGordo": {
         "precio": 4419,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero"
       },
       "novillo431": {
         "precio": 4531,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero"
       },
       "vaquillona270": {
         "precio": 4921,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero"
       },
       "novillito300": {
         "precio": 4954,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero"
       },
@@ -320,21 +320,21 @@
       "hilton": {
         "precio": 24000,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "FOB Bs As",
         "fuente": "APEA.org.ar"
       },
       "novMestizo": {
         "precio": 8200,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar"
       },
       "vacaConserva": {
         "precio": 3100,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar"
       }

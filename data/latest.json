@@ -1,23 +1,23 @@
 {
   "fecha": "2026-04-27",
-  "hora": "12:13",
+  "hora": "13:54",
   "diaMercado": true,
   "_modo": "PARTIAL",
-  "_syncTime": "2026-04-27T12:13:50.873Z",
+  "_syncTime": "2026-04-27T13:54:20.014Z",
   "_version": "4.5.0-FEMP-Extended",
   "dolar": {
     "oficial": {
       "precio": 1420,
       "compra": 1370,
-      "fecha": "2026-04-24",
-      "hora": "12:13",
+      "fecha": "2026-04-27",
+      "hora": "13:54",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
     "blue": {
       "precio": 1420,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     },
@@ -25,63 +25,63 @@
       "precio": 1441.4,
       "compra": 1437,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Mercado Libre",
       "fuente": "DolarAPI"
     }
   },
   "granos": {
     "maiz": {
-      "precio": 253480,
+      "precio": 257184,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     },
     "soja": {
       "precio": 430000,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Rosario, SF",
       "fuente": "BCR Rosario"
     }
   },
   "canuelas": {
     "fecha": "2026-04-27",
-    "hora": "12:13",
+    "hora": "13:54",
     "entrada": 0,
     "vacaGorda": {
       "precio": 3197,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "MAG Cañuelas",
       "fuente": "Mercado Agroganadero"
     },
     "novilloGordo": {
       "precio": 4419,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "MAG Cañuelas",
       "fuente": "Mercado Agroganadero"
     },
     "novillo431": {
       "precio": 4531,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "MAG Cañuelas",
       "fuente": "Mercado Agroganadero"
     },
     "vaquillona270": {
       "precio": 4921,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "MAG Cañuelas",
       "fuente": "Mercado Agroganadero"
     },
     "novillito300": {
       "precio": 4954,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "MAG Cañuelas",
       "fuente": "Mercado Agroganadero"
     },
@@ -91,21 +91,21 @@
     "hilton": {
       "precio": 24000,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "FOB Bs As",
       "fuente": "APEA.org.ar"
     },
     "novMestizo": {
       "precio": 8200,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     },
     "vacaConserva": {
       "precio": 3100,
       "fecha": "2026-04-27",
-      "hora": "12:13",
+      "hora": "13:54",
       "lugar": "Expo Bs As",
       "fuente": "APEA.org.ar"
     }
@@ -134,7 +134,7 @@
       "novillo": {
         "precio": 4419,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero",
         "price_type": "pie"
@@ -142,7 +142,7 @@
       "vaca": {
         "precio": 3197,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "MAG Cañuelas",
         "fuente": "Mercado Agroganadero",
         "price_type": "pie"
@@ -152,7 +152,7 @@
       "novillo": {
         "precio": 8200,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar",
         "price_type": "gancho"
@@ -160,7 +160,7 @@
       "vaca": {
         "precio": 3100,
         "fecha": "2026-04-27",
-        "hora": "12:13",
+        "hora": "13:54",
         "lugar": "Expo Bs As",
         "fuente": "APEA.org.ar",
         "price_type": "pie"
@@ -191,7 +191,7 @@
       "dato": "Dolar",
       "fuente": "DolarAPI",
       "url": "https://dolarapi.com",
-      "timestamp": "27/4/2026, 12:13:51",
+      "timestamp": "27/4/2026, 01:54:20",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -199,7 +199,7 @@
       "dato": "Granos",
       "fuente": "BCR Rosario",
       "url": "https://www.bcr.com.ar",
-      "timestamp": "27/4/2026, 12:13:59",
+      "timestamp": "27/4/2026, 01:54:30",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -207,7 +207,7 @@
       "dato": "Canuelas",
       "fuente": "Mercado Agroganadero",
       "url": "https://www.mercadoagroganadero.com.ar",
-      "timestamp": "27/4/2026, 12:14:02",
+      "timestamp": "27/4/2026, 01:54:32",
       "estado": "OK",
       "confianza": "ALTA"
     },
@@ -215,7 +215,7 @@
       "dato": "APEA",
       "fuente": "APEA.org.ar",
       "url": "https://www.apea.org.ar",
-      "timestamp": "27/4/2026, 12:14:04",
+      "timestamp": "27/4/2026, 01:54:44",
       "estado": "OK",
       "confianza": "MEDIA"
     }
