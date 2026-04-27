@@ -253,5 +253,92 @@
     },
     "ganaderoIndex": 100,
     "senal": "MANTENER"
+  },
+  {
+    "fecha": "2026-04-27",
+    "canuelas": {
+      "fecha": "2026-04-24",
+      "entrada": 8442,
+      "vacaGorda": {
+        "precio": 3197,
+        "unidad": "$/kg",
+        "categoria": "Buenas",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "novilloGordo": {
+        "precio": 4419,
+        "fecha": "2026-04-24",
+        "hora": "10:48",
+        "lugar": "MAG Cañuelas",
+        "fuente": "Canuelas (seed)"
+      },
+      "novillo431": {
+        "precio": 4531,
+        "unidad": "$/kg",
+        "categoria": "Mest.EyB 431/460",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "vaquillona270": {
+        "precio": 4921,
+        "unidad": "$/kg",
+        "categoria": "EyB 270/390",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "novillito300": {
+        "precio": 4954,
+        "unidad": "$/kg",
+        "categoria": "EyB 300/390",
+        "fecha": "2026-04-24",
+        "fuente": "Canuelas (seed)"
+      },
+      "entradaSemanal": 8442
+    },
+    "ceres": {
+      "fecha": "2026-04-24",
+      "hora": "13:00",
+      "lugar": "Predio Ferial Ceres",
+      "ternero": {
+        "precio": 6373,
+        "fecha": "2026-04-27",
+        "hora": "10:48",
+        "lugar": "Predio Ceres, SF",
+        "fuente": "Infocampo / Tradición"
+      },
+      "novillito": 5380,
+      "vaquillona160": 6100,
+      "vaquillona200": 5800,
+      "vacaGorda": 3200,
+      "novilloGordo": 4500,
+      "promMesAnterior": 4350,
+      "fuente": "Ceres (seed)"
+    },
+    "apea": {
+      "hilton": {
+        "precio": 24000,
+        "fecha": "2026-04-27",
+        "hora": "10:48",
+        "lugar": "FOB Bs As",
+        "fuente": "APEA.org.ar"
+      },
+      "novMestizo": {
+        "precio": 8200,
+        "fecha": "2026-04-27",
+        "hora": "10:48",
+        "lugar": "Expo Bs As",
+        "fuente": "APEA.org.ar"
+      },
+      "vacaConserva": {
+        "precio": 3100,
+        "fecha": "2026-04-27",
+        "hora": "10:48",
+        "lugar": "Expo Bs As",
+        "fuente": "APEA.org.ar"
+      }
+    },
+    "ganaderoIndex": 100,
+    "senal": "MANTENER"
   }
 ]
