@@ -1,0 +1,117 @@
+{
+  "fecha": "2026-04-27",
+  "hora": "08:30",
+  "diaMercado": true,
+  "_modo": "AUTO",
+  "_syncTime": "2026-04-27T08:30:00.000Z",
+  "_version": "4.5.0-FEMP-Extended",
+  "_confianza": 95,
+
+  "categorias": {
+    "consumo": {
+      "novillo": {
+        "precio": 4419,
+        "price_type": "pie",
+        "fecha": "2026-04-27",
+        "hora": "08:30",
+        "fuente": "Mercado Agroganadero",
+        "lugar": "MAG Cañuelas"
+      },
+      "vaca": {
+        "precio": 3197,
+        "price_type": "pie",
+        "fecha": "2026-04-27",
+        "hora": "08:30",
+        "fuente": "Mercado Agroganadero",
+        "lugar": "MAG Cañuelas"
+      }
+    },
+    "exportacion": {
+      "novillo": {
+        "precio": 8200,
+        "price_type": "gancho",
+        "fecha": "2026-04-27",
+        "hora": "08:30",
+        "fuente": "APEA.org.ar",
+        "lugar": "Expo Bs As"
+      },
+      "vaca": {
+        "precio": 3100,
+        "price_type": "pie",
+        "fecha": "2026-04-27",
+        "hora": "08:30",
+        "fuente": "APEA.org.ar",
+        "lugar": "Expo Bs As"
+      }
+    },
+    "invernada": {
+      "ternero": {
+        "160-180": {
+          "precio": 6373,
+          "price_type": "pie",
+          "weight_range": "160-180",
+          "fecha": "2026-04-27",
+          "hora": "08:30",
+          "fuente": "Infocampo / Tradición",
+          "lugar": "Predio Ceres, SF"
+        },
+        "180-200": {
+          "precio": 6200,
+          "price_type": "pie",
+          "weight_range": "180-200",
+          "fecha": "2026-04-27",
+          "hora": "08:30",
+          "fuente": "Infocampo / Tradición",
+          "lugar": "Predio Ceres, SF"
+        }
+      },
+      "novillito": {
+        "200-220": {
+          "precio": 5380,
+          "price_type": "pie",
+          "weight_range": "200-220",
+          "fecha": "2026-04-27",
+          "hora": "08:30",
+          "fuente": "Infocampo / Tradición",
+          "lugar": "Predio Ceres, SF"
+        },
+        "220-250": {
+          "precio": 5100,
+          "price_type": "gancho",
+          "weight_range": "220-250",
+          "fecha": "2026-04-27",
+          "hora": "08:30",
+          "fuente": "Infocampo / Tradición",
+          "lugar": "Predio Ceres, SF"
+        }
+      },
+      "vaquillona": {
+        "200-220": {
+          "precio": 5800,
+          "price_type": "pie",
+          "weight_range": "200-220",
+          "fecha": "2026-04-27",
+          "hora": "08:30",
+          "fuente": "Infocampo / Tradición",
+          "lugar": "Predio Ceres, SF"
+        }
+      }
+    }
+  },
+
+  "dolar": {
+    "oficial": { "precio": 1400, "fecha": "2026-04-27", "hora": "08:30", "fuente": "DolarAPI", "lugar": "Mercado Libre" },
+    "blue": { "precio": 1410, "fecha": "2026-04-27", "hora": "08:30", "fuente": "DolarAPI", "lugar": "Mercado Libre" },
+    "mep": { "precio": 1419, "fecha": "2026-04-27", "hora": "08:30", "fuente": "DolarAPI", "lugar": "Mercado Libre" }
+  },
+  "granos": {
+    "maiz": { "precio": 257184, "fecha": "2026-04-27", "hora": "08:30", "fuente": "BCR Rosario", "lugar": "Rosario, SF" },
+    "soja": { "precio": 430000, "fecha": "2026-04-27", "hora": "08:30", "fuente": "BCR Rosario", "lugar": "Rosario, SF" }
+  },
+
+  "ganaderoIndex": 102.45,
+  "senalMercado": { "sma7": 101.2, "sma15": 100.8, "tendencia": "COMPRA" },
+
+  "_lineage": [],
+  "_errores": []
+}
